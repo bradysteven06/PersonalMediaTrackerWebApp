@@ -1,6 +1,7 @@
 // Get references to form and display container
 const form = document.getElementById("mediaForm");
 const entriesContainer = document.getElementById("entriesContainer");
+const cancelEditBtn = document.getElementById("cancelEditBtn");
 
 // Track edit mode and index
 let isEditMode = false;
@@ -46,6 +47,16 @@ function editEntry(index) {
 
     // Change button text
     form.querySelector("button[type='submit']").textContent = "Save Changes";
+
+    cancelEditBtn.style.display = "inline-block";
+}
+
+function cancelEditMode() {
+    isEditMode = false;
+    editIndex = null;
+    form.reset(); // Clear form fields
+    form.querySelector("button[type='submit']").textContent = "Add Entry";
+    cancelEditBtn.style.display = "none";
 }
 
 // Remove an entry by its index
@@ -74,6 +85,7 @@ form.addEventListener("submit", (e) => {
     isEditMode = false;
     editIndex = null;
     form.querySelector("button[type='submit']").textContent = "Add Entry";
+    cancelEditBtn.style.display = "none";
   } else {
     // Add new entry
     mediaList.push(entryData);
@@ -84,6 +96,8 @@ form.addEventListener("submit", (e) => {
   renderEntries();
   form.reset(); // Clear form
 });
+
+cancelEditBtn.addEventListener("click", cancelEditMode);
 
 // Render list on page load
 renderEntries();
