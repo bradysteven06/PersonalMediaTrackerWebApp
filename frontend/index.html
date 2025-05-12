@@ -12,33 +12,47 @@
   </header>
 
   <main>
+    <!-- Section for the form to add a new entry -->
     <section id="entry-form">
-      <h2>Add New Entry</h2>
-      <form id="mediaForm">
-        <input type="text" id="title" placeholder="Title" required />
-        <select id="type">
-          <option value="anime">Anime</option>
-          <option value="manga">Manga</option>
-        </select>
-        <select id="status">
-          <option value="watching">Watching</option>
-          <option value="completed">Completed</option>
-          <option value="on-hold">On-Hold</option>
-          <option value="dropped">Dropped</option>
-          <option value="plan-to-watch">Plan to Watch</option>
-        </select>
-        <input type="number" id="rating" placeholder="Rating (1–10)" min="1" max="10" />
-        <textarea id="notes" placeholder="Notes..."></textarea>
-        <button type="submit">Add Entry</button>
-      </form>
-    </section>
-
-    <section id="media-list">
-      <h2>My Media List</h2>
-      <ul id="entriesContainer"></ul>
-    </section>
-  </main>
-
-  <script src="app.js"></script>
-</body>
+        <h2>Add New Entry</h2>
+        <form id="mediaForm">
+          <!-- Title of the media -->
+          <input type="text" id="title" placeholder="Title" required />
+  
+          <!-- Select type of media -->
+          <select id="type">
+            <option value="anime">Anime</option>
+            <option value="manga">Manga</option>
+          </select>
+  
+          <!-- Select current watch/read status -->
+          <select id="status">
+            <option value="watching">Watching / Reading</option>
+            <option value="completed">Completed</option>
+            <option value="on-hold">On-Hold</option>
+            <option value="dropped">Dropped</option>
+            <option value="plan-to-watch">Plan to Watch / Read</option>
+          </select>
+  
+          <!-- Optional rating field -->
+          <input type="number" id="rating" placeholder="Rating (1–10)" min="1" max="10" />
+  
+          <!-- Notes field -->
+          <textarea id="notes" placeholder="Notes..."></textarea>
+  
+          <!-- Submit button -->
+          <button type="submit">Add Entry</button>
+        </form>
+      </section>
+  
+      <!-- Section where the media list is rendered -->
+      <section id="media-list">
+        <h2>My Media List</h2>
+        <ul id="entriesContainer"></ul>
+      </section>
+    </main>
+  
+    <!-- Link to the JavaScript file -->
+    <script src="app.js"></script>
+  </body>
 </html>

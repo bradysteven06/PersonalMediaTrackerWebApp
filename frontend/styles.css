@@ -1,3 +1,4 @@
+/* Basic layout and body styling */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -5,6 +6,7 @@ body {
     background: #f2f2f2;
   }
   
+  /* Header bar */
   header {
     background: #333;
     color: white;
@@ -12,6 +14,7 @@ body {
     text-align: center;
   }
   
+  /* Form container styling */
   form {
     background: white;
     padding: 1em;
@@ -19,6 +22,7 @@ body {
     border-radius: 4px;
   }
   
+  /* Style for form controls */
   form input,
   form select,
   form textarea,
@@ -29,6 +33,7 @@ body {
     padding: 8px;
   }
   
+  /* List styling */
   ul {
     list-style: none;
     padding: 0;
