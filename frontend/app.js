@@ -2,6 +2,10 @@
 const form = document.getElementById("mediaForm");
 const entriesContainer = document.getElementById("entriesContainer");
 
+// Track edit mode and index
+let isEditMode = false;
+let editIndex = null;
+
 // Load existing entries from localStorage, or initialize empty array
 let mediaList = JSON.parse(localStorage.getItem("mediaList")) || [];
 
@@ -20,10 +24,28 @@ function renderEntries() {
       <strong>${entry.title}</strong> (${entry.type}, ${entry.status}) - Rating: ${entry.rating || 'N/A'}
       <br/><small>${entry.notes}</small>
       <br/>
+      <button onclick="editEntry(${index})">Edit</button>
       <button onclick="deleteEntry(${index})">Delete</button>
     `;
     entriesContainer.appendChild(li);
   });
+}
+
+// Edit an entry by its index
+function editEntry(index) {
+    const entry = mediaList[index];
+
+    document.getElementById("title").value = entry.title;
+    document.getElementById("type").value = entry.type;
+    document.getElementById("status").value = entry.status;
+    document.getElementById("rating").value = entry.rating;
+    document.getElementById("notes").value = entry.notes;
+
+    isEditMode = true;
+    editIndex = index;
+
+    // Change button text
+    form.querySelector("button[type='submit']").textContent = "Save Changes";
 }
 
 // Remove an entry by its index
@@ -37,8 +59,8 @@ function deleteEntry(index) {
 form.addEventListener("submit", (e) => {
   e.preventDefault(); // Prevent page reload
 
-  // Create a new entry object from form inputs
-  const newEntry = {
+  // Create a entry object from form inputs
+  const entryData = {
     title: document.getElementById("title").value.trim(),
     type: document.getElementById("type").value,
     status: document.getElementById("status").value,
@@ -46,8 +68,18 @@ form.addEventListener("submit", (e) => {
     notes: document.getElementById("notes").value.trim()
   };
 
+  if (isEditMode) {
+    // Update existing entry
+    mediaList[editIndex] = entryData;
+    isEditMode = false;
+    editIndex = null;
+    form.querySelector("button[type='submit']").textContent = "Add Entry";
+  } else {
+    // Add new entry
+    mediaList.push(entryData);
+  }
+
   // Add to media list and update storage
-  mediaList.push(newEntry);
   saveToLocalStorage();
   renderEntries();
   form.reset(); // Clear form
