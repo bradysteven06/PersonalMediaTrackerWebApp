@@ -22,12 +22,12 @@ function renderEntries() {
   mediaList.forEach((entry, index) => {
     const li = document.createElement("li");
     li.innerHTML = `
-      <strong>${entry.title}</strong> (${entry.type}, ${entry.status}) - Rating: ${entry.rating || 'N/A'}
-      <br/><small>${entry.notes}</small>
-      <br/>
-      <button onclick="editEntry(${index})">Edit</button>
-      <button onclick="deleteEntry(${index})">Delete</button>
-    `;
+        <strong>${entry.title}</strong> (${entry.type} - ${entry.subType}, ${entry.status}) - Rating: ${entry.rating || 'N/A'}
+        <br/><small>${entry.notes}</small>
+        <br/>
+        <button onclick="editEntry(${index})">Edit</button>
+        <button onclick="deleteEntry(${index})">Delete</button>
+        `;
     entriesContainer.appendChild(li);
   });
 }
@@ -38,6 +38,7 @@ function editEntry(index) {
 
     document.getElementById("title").value = entry.title;
     document.getElementById("type").value = entry.type;
+    document.getElementById("subType").value = entry.subType;
     document.getElementById("status").value = entry.status;
     document.getElementById("rating").value = entry.rating;
     document.getElementById("notes").value = entry.notes;
@@ -74,6 +75,7 @@ form.addEventListener("submit", (e) => {
   const entryData = {
     title: document.getElementById("title").value.trim(),
     type: document.getElementById("type").value,
+    subType: document.getElementById("subType").value,
     status: document.getElementById("status").value,
     rating: document.getElementById("rating").value,
     notes: document.getElementById("notes").value.trim()
