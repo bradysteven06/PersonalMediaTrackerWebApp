@@ -22,12 +22,13 @@ function renderEntries() {
   mediaList.forEach((entry, index) => {
     const li = document.createElement("li");
     li.innerHTML = `
-        <strong>${entry.title}</strong> (${entry.type} - ${entry.subType}, ${entry.status}) - Rating: ${entry.rating || 'N/A'}
-        <br/><small>${entry.notes}</small>
-        <br/>
-        <button onclick="editEntry(${index})">Edit</button>
-        <button onclick="deleteEntry(${index})">Delete</button>
-        `;
+      <strong>${entry.title}</strong> (${entry.type} - ${entry.subType}, ${entry.status})<br/>
+      Genres: ${entry.genres?.join(", ") || "N/A"} - Rating: ${entry.rating || 'N/A'}
+      <br/><small>${entry.notes}</small>
+      <br/>
+      <button onclick="editEntry(${index})">Edit</button>
+      <button onclick="deleteEntry(${index})">Delete</button>
+    `;
     entriesContainer.appendChild(li);
   });
 }
@@ -42,6 +43,11 @@ function editEntry(index) {
     document.getElementById("status").value = entry.status;
     document.getElementById("rating").value = entry.rating;
     document.getElementById("notes").value = entry.notes;
+
+    const genreSelect = document.getElementById("genres");
+    Array.from(genreSelect.options).forEach(option => {
+        option.selected = entry.genres?.includes(option.value);
+        });
 
     isEditMode = true;
     editIndex = index;
@@ -71,11 +77,15 @@ function deleteEntry(index) {
 form.addEventListener("submit", (e) => {
   e.preventDefault(); // Prevent page reload
 
+  const selectedGenres = Array.from(document.getElementById("genres").selectedOptions)
+  .map(option => option.value);
+
   // Create a entry object from form inputs
   const entryData = {
     title: document.getElementById("title").value.trim(),
     type: document.getElementById("type").value,
     subType: document.getElementById("subType").value,
+    genres: selectedGenres,
     status: document.getElementById("status").value,
     rating: document.getElementById("rating").value,
     notes: document.getElementById("notes").value.trim()

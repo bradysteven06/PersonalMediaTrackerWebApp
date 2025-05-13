@@ -7,61 +7,75 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header>
-    <h1>Personal Media Tracker</h1>
-  </header>
+    <header>
+        <h1>Personal Media Tracker</h1>
+    </header>
 
-  <main>
+    <main>
     <!-- Section for the form to add a new entry -->
     <section id="entry-form">
         <h2>Add New Entry</h2>
         <form id="mediaForm">
-          <!-- Title of the media -->
-          <input type="text" id="title" placeholder="Title" required />
-  
-          <!-- Select type of media -->
-          <select id="type">
-            <option value="movie">Movie</option>
-            <option value="series">Series</option>
-          </select>
+            <!-- Title of the media -->
+            <input type="text" id="title" placeholder="Title" required />
 
-          <!-- Select subtype (style/origin) -->
-           <select id="subType">
-            <option value="anime">Anime</option>
-            <option value="live-action">Live Action</option>
-            <option value="animated">Animated</option>
-            <option value="documentary">Documentary</option>
+            <!-- Select type of media -->
+            <select id="type">
+                <option value="movie">Movie</option>
+                <option value="series">Series</option>
             </select>
-  
-          <!-- Select current watch/read status -->
-          <select id="status">
-            <option value="watching">Watching / Reading</option>
-            <option value="completed">Completed</option>
-            <option value="on-hold">On-Hold</option>
-            <option value="dropped">Dropped</option>
-            <option value="plan-to-watch">Plan to Watch / Read</option>
-          </select>
-  
-          <!-- Optional rating field -->
-          <input type="number" id="rating" placeholder="Rating (1–10)" min="1" max="10" />
-  
-          <!-- Notes field -->
-          <textarea id="notes" placeholder="Notes..."></textarea>
-  
-          <!-- Submit button -->
-          <button type="submit">Add Entry</button>
-          <button type="button" id="cancelEditBtn" style="display: none;">Cancel</button>
+
+            <!-- Select subtype (style/origin) -->
+            <select id="subType">
+                <option value="anime">Anime</option>
+                <option value="live-action">Live Action</option>
+                <option value="animated">Animated</option>
+                <option value="documentary">Documentary</option>
+            </select>
+
+            <!-- Select genre -->
+            <select id="genres" multiple size="5">
+                <option value="action">Action</option>
+                <option value="adventure">Adventure</option>
+                <option value="comedy">Comedy</option>
+                <option value="drama">Drama</option>
+                <option value="fantasy">Fantasy</option>
+                <option value="romance">Romance</option>
+                <option value="sci-fi">Sci-Fi</option>
+                <option value="horror">Horror</option>
+                <option value="mystery">Mystery</option>
+            </select>
+            
+
+            <!-- Select current watch/read status -->
+            <select id="status">
+                <option value="watching">Watching / Reading</option>
+                <option value="completed">Completed</option>
+                <option value="on-hold">On-Hold</option>
+                <option value="dropped">Dropped</option>
+                <option value="plan-to-watch">Plan to Watch / Read</option>
+            </select>
+
+            <!-- Optional rating field -->
+            <input type="number" id="rating" placeholder="Rating (1–10)" min="1" max="10" />
+
+            <!-- Notes field -->
+            <textarea id="notes" placeholder="Notes..."></textarea>
+
+            <!-- Submit button -->
+            <button type="submit">Add Entry</button>
+            <button type="button" id="cancelEditBtn" style="display: none;">Cancel</button>
         </form>
-      </section>
-  
-      <!-- Section where the media list is rendered -->
-      <section id="media-list">
+        </section>
+
+        <!-- Section where the media list is rendered -->
+        <section id="media-list">
         <h2>My Media List</h2>
         <ul id="entriesContainer"></ul>
-      </section>
+        </section>
     </main>
-  
+
     <!-- Link to the JavaScript file -->
     <script src="app.js"></script>
-  </body>
+    </body>
 </html>
