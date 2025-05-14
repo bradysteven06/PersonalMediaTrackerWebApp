@@ -12,25 +12,25 @@ let mediaList = JSON.parse(localStorage.getItem("mediaList")) || [];
 
 // Save current media list to localStorage
 function saveToLocalStorage() {
-  localStorage.setItem("mediaList", JSON.stringify(mediaList));
+    localStorage.setItem("mediaList", JSON.stringify(mediaList));
 }
 
 // Render all entries to the page
 function renderEntries() {
-  entriesContainer.innerHTML = ""; // Clear existing entries
+    entriesContainer.innerHTML = ""; // Clear existing entries
 
-  mediaList.forEach((entry, index) => {
-    const li = document.createElement("li");
-    li.innerHTML = `
-      <strong>${entry.title}</strong> (${entry.type} - ${entry.subType}, ${entry.status})<br/>
-      Genres: ${entry.genres?.join(", ") || "N/A"} - Rating: ${entry.rating || 'N/A'}
-      <br/><small>${entry.notes}</small>
-      <br/>
-      <button onclick="editEntry(${index})">Edit</button>
-      <button onclick="deleteEntry(${index})">Delete</button>
-    `;
-    entriesContainer.appendChild(li);
-  });
+    mediaList.forEach((entry, index) => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+            <strong>${entry.title}</strong> (${entry.type} - ${entry.subType}, ${entry.status})<br/>
+            Genres: ${entry.genres?.join(", ") || "N/A"} - Rating: ${entry.rating || 'N/A'}
+            <br/><small>${entry.notes}</small>
+            <br/>
+            <button onclick="editEntry(${index})">Edit</button>
+            <button onclick="deleteEntry(${index})">Delete</button>
+        `;
+        entriesContainer.appendChild(li);
+    });
 }
 
 // Edit an entry by its index
@@ -44,10 +44,10 @@ function editEntry(index) {
     document.getElementById("rating").value = entry.rating;
     document.getElementById("notes").value = entry.notes;
 
-    const genreSelect = document.getElementById("genres");
-    Array.from(genreSelect.options).forEach(option => {
-        option.selected = entry.genres?.includes(option.value);
-        });
+    const genreCheckboxes = document.querySelectorAll('#genreCheckboxes input[type="checkbox"]');
+    genreCheckboxes.forEach(checkbox => {
+        checkbox.checked = entry.genres?.includes(checkbox.value);
+    });
 
     isEditMode = true;
     editIndex = index;
@@ -75,38 +75,38 @@ function deleteEntry(index) {
 
 // Handle form submission
 form.addEventListener("submit", (e) => {
-  e.preventDefault(); // Prevent page reload
+    e.preventDefault(); // Prevent page reload
 
-  const selectedGenres = Array.from(document.getElementById("genres").selectedOptions)
-  .map(option => option.value);
+    const selectedGenres = Array.from(document.querySelectorAll('#genreCheckboxes input[type="checkbox"]:checked'))
+    .map(checkbox => checkbox.value);
 
-  // Create a entry object from form inputs
-  const entryData = {
-    title: document.getElementById("title").value.trim(),
-    type: document.getElementById("type").value,
-    subType: document.getElementById("subType").value,
-    genres: selectedGenres,
-    status: document.getElementById("status").value,
-    rating: document.getElementById("rating").value,
-    notes: document.getElementById("notes").value.trim()
-  };
+    // Create a entry object from form inputs
+    const entryData = {
+        title: document.getElementById("title").value.trim(),
+        type: document.getElementById("type").value,
+        subType: document.getElementById("subType").value,
+        genres: selectedGenres,
+        status: document.getElementById("status").value,
+        rating: document.getElementById("rating").value,
+        notes: document.getElementById("notes").value.trim()
+    };
 
-  if (isEditMode) {
-    // Update existing entry
-    mediaList[editIndex] = entryData;
-    isEditMode = false;
-    editIndex = null;
-    form.querySelector("button[type='submit']").textContent = "Add Entry";
-    cancelEditBtn.style.display = "none";
-  } else {
-    // Add new entry
-    mediaList.push(entryData);
-  }
+    if (isEditMode) {
+        // Update existing entry
+        mediaList[editIndex] = entryData;
+        isEditMode = false;
+        editIndex = null;
+        form.querySelector("button[type='submit']").textContent = "Add Entry";
+        cancelEditBtn.style.display = "none";
+    } else {
+        // Add new entry
+        mediaList.push(entryData);
+    }
 
-  // Add to media list and update storage
-  saveToLocalStorage();
-  renderEntries();
-  form.reset(); // Clear form
+    // Add to media list and update storage
+    saveToLocalStorage();
+    renderEntries();
+    form.reset(); // Clear form
 });
 
 cancelEditBtn.addEventListener("click", cancelEditMode);
