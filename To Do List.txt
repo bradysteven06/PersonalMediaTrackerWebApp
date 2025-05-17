@@ -2,6 +2,10 @@ Filtering UI (e.g., filter by type, subType, or genre)
 
 Sorting entries (e.g., by title, rating, or status)
 
+Delete confirmation
+
+Separate page for add and edit - maybe separate both
+
 Tag badges for genres instead of plain text
 
 Dark mode toggle or improved responsive design
