@@ -59,7 +59,7 @@
             </select>
 
             <!-- Optional rating field -->
-            <input type="number" id="rating" placeholder="Rating (1–10)" min="1" max="10" />
+            <input type="number" id="rating" placeholder="Rating (1-10)" min="1" max="10" />
 
             <!-- Notes field -->
             <textarea id="notes" placeholder="Notes..."></textarea>
@@ -69,6 +69,42 @@
             <button type="button" id="cancelEditBtn" style="display: none;">Cancel</button>
         </form>
         </section>
+
+        <!-- Section for filtering options-->
+        <section id="filter-section">
+            <h2>Filter Entries</h2>
+          
+            <label for="filterType">Type:</label>
+            <select id="filterType">
+              <option value="">All</option>
+              <option value="movie">Movie</option>
+              <option value="series">Series</option>
+            </select>
+          
+            <label for="filterSubType">SubType:</label>
+            <select id="filterSubType">
+              <option value="">All</option>
+              <option value="anime">Anime</option>
+              <option value="live-action">Live Action</option>
+              <option value="animated">Animated</option>
+              <option value="documentary">Documentary</option>
+              <option value="manga">Manga</option>
+            </select>
+          
+            <label for="filterGenre">Genre:</label>
+            <select id="filterGenre">
+              <option value="">All</option>
+              <option value="action">Action</option>
+              <option value="adventure">Adventure</option>
+              <option value="comedy">Comedy</option>
+              <option value="drama">Drama</option>
+              <option value="fantasy">Fantasy</option>
+              <option value="romance">Romance</option>
+              <option value="sci-fi">Sci-Fi</option>
+              <option value="horror">Horror</option>
+              <option value="mystery">Mystery</option>
+            </select>
+          </section>
 
         <!-- Section where the media list is rendered -->
         <section id="media-list">

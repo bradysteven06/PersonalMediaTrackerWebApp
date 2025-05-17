@@ -45,7 +45,7 @@ fieldset#genreCheckboxes {
     border: 1px solid #ccc;
 }
   
-  #genreCheckboxes label {
+#genreCheckboxes label {
     display: inline-block;
     margin-right: 10px;
     margin-bottom: 5px;

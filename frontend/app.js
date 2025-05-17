@@ -19,7 +19,9 @@ function saveToLocalStorage() {
 function renderEntries() {
     entriesContainer.innerHTML = ""; // Clear existing entries
 
-    mediaList.forEach((entry, index) => {
+    const filteredEntries = getFilteredEntries();
+
+    filteredEntries.forEach((entry, index) => {
         const li = document.createElement("li");
         li.innerHTML = `
             <strong>${entry.title}</strong> (${entry.type} - ${entry.subType}, ${entry.status})<br/>
@@ -32,6 +34,21 @@ function renderEntries() {
         entriesContainer.appendChild(li);
     });
 }
+
+// Gets the filter options 
+function getFilteredEntries() {
+    const typeFilter = document.getElementById("filterType").value;
+    const subTypeFilter = document.getElementById("filterSubType").value;
+    const genreFilter = document.getElementById("filterGenre").value;
+  
+    return mediaList.filter(entry => {
+        const matchesType = typeFilter === "" || entry.type === typeFilter;
+        const matchesSubType = subTypeFilter === "" || entry.subType === subTypeFilter;
+        const matchesGenre = genreFilter === "" || (entry.genres && entry.genres.includes(genreFilter));
+
+        return matchesType && matchesSubType && matchesGenre;
+    });
+  }
 
 // Edit an entry by its index
 function editEntry(index) {
@@ -113,3 +130,7 @@ cancelEditBtn.addEventListener("click", cancelEditMode);
 
 // Render list on page load
 renderEntries();
+
+document.getElementById("filterType").addEventListener("change", renderEntries);
+document.getElementById("filterSubType").addEventListener("change", renderEntries);
+document.getElementById("filterGenre").addEventListener("change", renderEntries);
