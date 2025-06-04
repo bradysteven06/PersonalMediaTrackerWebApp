@@ -4,7 +4,7 @@ Sorting entries (e.g., by title, rating, or status) - done
 
 Delete confirmation - done
 
-Separate page for add and edit - maybe separate both
+Separate page for add and edit - maybe separate both - done
 
 Tag badges for genres instead of plain text
 

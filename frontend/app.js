@@ -28,7 +28,9 @@ function renderEntries() {
             Genres: ${entry.genres?.join(", ") || "N/A"} - Rating: ${entry.rating || 'N/A'}
             <br/><small>${entry.notes}</small>
             <br/>
-            <button onclick="editEntry(${index})">Edit</button>
+            <a href="entry.html?edit=${index}">
+                <button>Edit</button>
+            </a>
             <button onclick="deleteEntry(${index})">Delete</button>
         `;
         entriesContainer.appendChild(li);
@@ -62,39 +64,6 @@ function getFilteredEntries() {
     return filtered;
   }
 
-// Edit an entry by its index
-function editEntry(index) {
-    const entry = mediaList[index];
-
-    document.getElementById("title").value = entry.title;
-    document.getElementById("type").value = entry.type;
-    document.getElementById("subType").value = entry.subType;
-    document.getElementById("status").value = entry.status;
-    document.getElementById("rating").value = entry.rating;
-    document.getElementById("notes").value = entry.notes;
-
-    const genreCheckboxes = document.querySelectorAll('#genreCheckboxes input[type="checkbox"]');
-    genreCheckboxes.forEach(checkbox => {
-        checkbox.checked = entry.genres?.includes(checkbox.value);
-    });
-
-    isEditMode = true;
-    editIndex = index;
-
-    // Change button text
-    form.querySelector("button[type='submit']").textContent = "Save Changes";
-
-    cancelEditBtn.style.display = "inline-block";
-}
-
-function cancelEditMode() {
-    isEditMode = false;
-    editIndex = null;
-    form.reset(); // Clear form fields
-    form.querySelector("button[type='submit']").textContent = "Add Entry";
-    cancelEditBtn.style.display = "none";
-}
-
 // Remove an entry by its index
 function deleteEntry(index) {
     // confirmation for deleting an entry
@@ -105,44 +74,6 @@ function deleteEntry(index) {
     saveToLocalStorage();              // Save updated list
     renderEntries();                   // Re-render UI
 }
-
-// Handle form submission
-form.addEventListener("submit", (e) => {
-    e.preventDefault(); // Prevent page reload
-
-    const selectedGenres = Array.from(document.querySelectorAll('#genreCheckboxes input[type="checkbox"]:checked'))
-    .map(checkbox => checkbox.value);
-
-    // Create a entry object from form inputs
-    const entryData = {
-        title: document.getElementById("title").value.trim(),
-        type: document.getElementById("type").value,
-        subType: document.getElementById("subType").value,
-        genres: selectedGenres,
-        status: document.getElementById("status").value,
-        rating: document.getElementById("rating").value,
-        notes: document.getElementById("notes").value.trim()
-    };
-
-    if (isEditMode) {
-        // Update existing entry
-        mediaList[editIndex] = entryData;
-        isEditMode = false;
-        editIndex = null;
-        form.querySelector("button[type='submit']").textContent = "Add Entry";
-        cancelEditBtn.style.display = "none";
-    } else {
-        // Add new entry
-        mediaList.push(entryData);
-    }
-
-    // Add to media list and update storage
-    saveToLocalStorage();
-    renderEntries();
-    form.reset(); // Clear form
-});
-
-cancelEditBtn.addEventListener("click", cancelEditMode);
 
 // inject sample data for testing
 if (mediaList.length === 0) {

@@ -1,128 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Personal Media Tracker</title>
-  <link rel="stylesheet" href="styles.css" />
-</head>
-<body>
-    <header>
-        <h1>Personal Media Tracker</h1>
-    </header>
+    <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Personal Media Tracker</title>
+    <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+        <header>
+            <h1>Personal Media Tracker</h1>
+        </header>
 
-    <main>
-    <!-- Section for the form to add a new entry -->
-    <section id="entry-form">
-        <h2>Add New Entry</h2>
-        <form id="mediaForm">
-            <!-- Title of the media -->
-            <input type="text" id="title" placeholder="Title" required />
-
-            <!-- Select type of media -->
-            <select id="type">
-                <option value="movie">Movie</option>
-                <option value="series">Series</option>
-            </select>
-
-            <!-- Select subtype (style/origin) -->
-            <select id="subType">
-                <option value="anime">Anime</option>
-                <option value="live-action">Live Action</option>
-                <option value="animated">Animated</option>
-                <option value="documentary">Documentary</option>
-                <option value="manga">Manga</option>
-            </select>
-
-            <!-- Select genre -->
-            <fieldset id="genreCheckboxes">
-                <legend>Genres</legend>
-                <label><input type="checkbox" value="action"> Action</label>
-                <label><input type="checkbox" value="adventure"> Adventure</label>
-                <label><input type="checkbox" value="comedy"> Comedy</label>
-                <label><input type="checkbox" value="drama"> Drama</label>
-                <label><input type="checkbox" value="fantasy"> Fantasy</label>
-                <label><input type="checkbox" value="romance"> Romance</label>
-                <label><input type="checkbox" value="sci-fi"> Sci-Fi</label>
-                <label><input type="checkbox" value="horror"> Horror</label>
-                <label><input type="checkbox" value="mystery"> Mystery</label>
-            </fieldset>
+        <main>
+            <!-- New Entry button to navigate to entry form -->
+            <div style="margin-bottom: 1em;">
+            <a href="entry.html">
+                <button type="button">+ New Entry</button>
+            </a>
+            </div>
             
+            <!-- Section for filtering options-->
+            <section id="filter-section">
+                <h2>Filter Entries</h2>
+                
+                <label for="filterType">Type:</label>
+                <select id="filterType">
+                    <option value="">All</option>
+                    <option value="movie">Movie</option>
+                    <option value="series">Series</option>
+                </select>
+                
+                <label for="filterSubType">SubType:</label>
+                <select id="filterSubType">
+                    <option value="">All</option>
+                    <option value="anime">Anime</option>
+                    <option value="live-action">Live Action</option>
+                    <option value="animated">Animated</option>
+                    <option value="documentary">Documentary</option>
+                    <option value="manga">Manga</option>
+                </select>
+                
+                <label for="filterGenre">Genre:</label>
+                <select id="filterGenre">
+                    <option value="">All</option>
+                    <option value="action">Action</option>
+                    <option value="adventure">Adventure</option>
+                    <option value="comedy">Comedy</option>
+                    <option value="drama">Drama</option>
+                    <option value="fantasy">Fantasy</option>
+                    <option value="romance">Romance</option>
+                    <option value="sci-fi">Sci-Fi</option>
+                    <option value="horror">Horror</option>
+                    <option value="mystery">Mystery</option>
+                </select>
+                
+                <!-- Sorting control-->
+                <label for="sortBy">Sort By:</label>
+                <select id="sortBy">
+                    <option value="">None</option>
+                    <option value="title">Title (A → Z)</option>
+                    <option value="rating">Rating (High → Low)</option>
+                    <option value="status">Status (A → Z)</option>
+                </select>
+            </section>
 
-            <!-- Select current watch/read status -->
-            <select id="status">
-                <option value="watching">Watching / Reading</option>
-                <option value="completed">Completed</option>
-                <option value="on-hold">On-Hold</option>
-                <option value="dropped">Dropped</option>
-                <option value="plan-to-watch">Plan to Watch / Read</option>
-            </select>
+            <!-- Section where the media list is rendered -->
+            <section id="media-list">
+            <h2>My Media List</h2>
+            <ul id="entriesContainer"></ul>
+            </section>
+        </main>
 
-            <!-- Optional rating field -->
-            <input type="number" id="rating" placeholder="Rating (1-10)" min="1" max="10" />
-
-            <!-- Notes field -->
-            <textarea id="notes" placeholder="Notes..."></textarea>
-
-            <!-- Submit button -->
-            <button type="submit">Add Entry</button>
-            <button type="button" id="cancelEditBtn" style="display: none;">Cancel</button>
-        </form>
-        </section>
-
-        <!-- Section for filtering options-->
-        <section id="filter-section">
-            <h2>Filter Entries</h2>
-          
-            <label for="filterType">Type:</label>
-            <select id="filterType">
-              <option value="">All</option>
-              <option value="movie">Movie</option>
-              <option value="series">Series</option>
-            </select>
-          
-            <label for="filterSubType">SubType:</label>
-            <select id="filterSubType">
-              <option value="">All</option>
-              <option value="anime">Anime</option>
-              <option value="live-action">Live Action</option>
-              <option value="animated">Animated</option>
-              <option value="documentary">Documentary</option>
-              <option value="manga">Manga</option>
-            </select>
-          
-            <label for="filterGenre">Genre:</label>
-            <select id="filterGenre">
-              <option value="">All</option>
-              <option value="action">Action</option>
-              <option value="adventure">Adventure</option>
-              <option value="comedy">Comedy</option>
-              <option value="drama">Drama</option>
-              <option value="fantasy">Fantasy</option>
-              <option value="romance">Romance</option>
-              <option value="sci-fi">Sci-Fi</option>
-              <option value="horror">Horror</option>
-              <option value="mystery">Mystery</option>
-            </select>
-            
-            <!-- Sorting control-->
-            <label for="sortBy">Sort By:</label>
-            <select id="sortBy">
-                <option value="">None</option>
-                <option value="title">Title (A → Z)</option>
-                <option value="rating">Rating (High → Low)</option>
-                <option value="status">Status (A → Z)</option>
-            </select>
-        </section>
-
-        <!-- Section where the media list is rendered -->
-        <section id="media-list">
-        <h2>My Media List</h2>
-        <ul id="entriesContainer"></ul>
-        </section>
-    </main>
-
-    <!-- Link to the JavaScript file -->
-    <script src="app.js"></script>
+        <!-- Link to the JavaScript file -->
+        <script src="app.js"></script>
     </body>
 </html>
