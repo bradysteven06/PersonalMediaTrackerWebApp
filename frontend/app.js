@@ -97,9 +97,13 @@ function cancelEditMode() {
 
 // Remove an entry by its index
 function deleteEntry(index) {
-  mediaList.splice(index, 1);        // Remove from array
-  saveToLocalStorage();              // Save updated list
-  renderEntries();                   // Re-render UI
+    // confirmation for deleting an entry
+    const confirmed = confirm(`Are you sure you want to delete "${mediaList[index].title}"?`);
+    if (!confirmed) return; 
+
+    mediaList.splice(index, 1);        // Remove from array
+    saveToLocalStorage();              // Save updated list
+    renderEntries();                   // Re-render UI
 }
 
 // Handle form submission

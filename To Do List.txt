@@ -2,7 +2,7 @@ Filtering UI (e.g., filter by type, subType, or genre) - done
 
 Sorting entries (e.g., by title, rating, or status) - done
 
-Delete confirmation
+Delete confirmation - done
 
 Separate page for add and edit - maybe separate both
 
@@ -11,3 +11,15 @@ Tag badges for genres instead of plain text
 Dark mode toggle or improved responsive design
 
 Begin backend setup (replace localStorage with C#/SQL API)
+
+
+
+Future Ideas:
+
+group all the filtering and sorting controls inside a form or div for styling and layout consistency
+
+replace confirm() with a custom modal for delete confirmation
+
+show a toast message after deletion
+
+allow undo of delete entry (via temp buffer)
