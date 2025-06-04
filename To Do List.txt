@@ -1,6 +1,6 @@
 Filtering UI (e.g., filter by type, subType, or genre) - done
 
-Sorting entries (e.g., by title, rating, or status)
+Sorting entries (e.g., by title, rating, or status) - done
 
 Delete confirmation
 

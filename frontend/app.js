@@ -40,14 +40,26 @@ function getFilteredEntries() {
     const typeFilter = document.getElementById("filterType").value;
     const subTypeFilter = document.getElementById("filterSubType").value;
     const genreFilter = document.getElementById("filterGenre").value;
+    const sortBy = document.getElementById("sortBy").value;
   
-    return mediaList.filter(entry => {
+    // Apply filters
+    let filtered = mediaList.filter(entry => {
         const matchesType = typeFilter === "" || entry.type === typeFilter;
         const matchesSubType = subTypeFilter === "" || entry.subType === subTypeFilter;
         const matchesGenre = genreFilter === "" || (entry.genres && entry.genres.includes(genreFilter));
-
         return matchesType && matchesSubType && matchesGenre;
     });
+
+    // Apply sort
+    if (sortBy === "title") {
+        filtered.sort((a, b) => a.title.localeCompare(b.title));
+    } else if (sortBy === "rating") {
+        filtered.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+    } else if (sortBy === "status") {
+        filtered.sort((a, b) => a.status.localeCompare(b.status));
+    }
+
+    return filtered;
   }
 
 // Edit an entry by its index
@@ -186,3 +198,4 @@ renderEntries();
 document.getElementById("filterType").addEventListener("change", renderEntries);
 document.getElementById("filterSubType").addEventListener("change", renderEntries);
 document.getElementById("filterGenre").addEventListener("change", renderEntries);
+document.getElementById("sortBy").addEventListener("change", renderEntries);
