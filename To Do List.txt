@@ -1,4 +1,4 @@
-Filtering UI (e.g., filter by type, subType, or genre)
+Filtering UI (e.g., filter by type, subType, or genre) - done
 
 Sorting entries (e.g., by title, rating, or status)
 

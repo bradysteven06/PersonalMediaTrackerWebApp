@@ -128,6 +128,58 @@ form.addEventListener("submit", (e) => {
 
 cancelEditBtn.addEventListener("click", cancelEditMode);
 
+// inject sample data for testing
+if (mediaList.length === 0) {
+    mediaList = [
+        {
+            title: "Spirited Away",
+            type: "movie",
+            subType: "anime",
+            genres: ["fantasy", "adventure"],
+            status: "completed",
+            rating: 10,
+            notes: "Gorgeous visuals and emotional story."
+        },
+        {
+            title: "Breaking Bad",
+            type: "series",
+            subType: "live-action",
+            genres: ["drama", "crime"],
+            status: "completed",
+            rating: 9,
+            notes: "Amazing character development."
+        },
+        {
+            title: "Attack on Titan",
+            type: "series",
+            subType: "anime",
+            genres: ["action", "drama"],
+            status: "in-progress",
+            rating: 8,
+            notes: "Intense and plot-heavy."
+        },
+        {
+            title: "The Mandalorian",
+            type: "series",
+            subType: "live-action",
+            genres: ["action", "sci-fi"],
+            status: "completed",
+            rating: 8,
+            notes: "Star Wars done right."
+        },
+        {
+            title: "One Piece: Strong World",
+            type: "movie",
+            subType: "anime",
+            genres: ["romance", "fantasy"],
+            status: "completed",
+            rating: 9,
+            notes: "Beautiful and emotional."
+        }
+    ];
+    saveToLocalStorage();
+}
+
 // Render list on page load
 renderEntries();
 
