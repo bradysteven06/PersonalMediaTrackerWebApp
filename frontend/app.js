@@ -25,7 +25,7 @@ function renderEntries() {
         const li = document.createElement("li");
         li.innerHTML = `
             <strong>${entry.title}</strong> (${entry.type} - ${entry.subType}, ${entry.status})<br/>
-            Genres: ${entry.genres?.join(", ") || "N/A"} - Rating: ${entry.rating || 'N/A'}
+            Genres: ${entry.genres?.map(genre => `<span class="genre-badge">${genre}</span>`).join(" ") || "N/A"} - Rating: ${entry.rating || 'N/A'}
             <br/><small>${entry.notes}</small>
             <br/>
             <a href="entry.html?edit=${index}">

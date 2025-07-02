@@ -6,7 +6,7 @@ Delete confirmation - done
 
 Separate page for add and edit - maybe separate both - done
 
-Tag badges for genres instead of plain text
+Tag badges for genres instead of plain text - done
 
 Dark mode toggle or improved responsive design
 
@@ -23,3 +23,5 @@ replace confirm() with a custom modal for delete confirmation
 show a toast message after deletion
 
 allow undo of delete entry (via temp buffer)
+
+toggle tags for the checkboxes in the form
