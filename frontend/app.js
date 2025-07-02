@@ -134,3 +134,22 @@ document.getElementById("filterType").addEventListener("change", renderEntries);
 document.getElementById("filterSubType").addEventListener("change", renderEntries);
 document.getElementById("filterGenre").addEventListener("change", renderEntries);
 document.getElementById("sortBy").addEventListener("change", renderEntries);
+
+// Dark mode support
+const darkToggle = document.getElementById("darkModeToggle");
+const prefersDark = localStorage.getItem("darkMode") === "true";
+
+// Apply saved mode
+if (prefersDark) {
+    document.body.classList.add("dark-mode");
+    if (darkToggle) darkToggle.checked = true;
+}
+
+// Listen for toggle changes
+if (darkToggle) {
+    darkToggle.addEventListener("change", () => {
+        const enabled = darkToggle.checked;
+        document.body.classList.toggle("dark-mode", enabled);
+        localStorage.setItem("darkMode", enabled);
+    });
+}
