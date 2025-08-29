@@ -8,7 +8,7 @@ Separate page for add and edit - maybe separate both - done
 
 Tag badges for genres instead of plain text - done
 
-Dark mode toggle
+Dark mode toggle - done
 
 Improved responsive design
 

@@ -6,20 +6,38 @@ body {
     background: #f2f2f2;
 }
 
+main, section {
+    padding-top: .5em;
+    padding-bottom: .5em;
+    margin-top: .5em;
+    margin-bottom: .5em;
+}
+
 /* Header bar */
 header {
-background: #333;
-color: white;
-padding: 1em;
-text-align: center;
+    background: #333;
+    color: white;
+    padding: 1em;
+    text-align: center;
+}
+
+.entry-button {
+    display: inline-block;
+    background-color: #ddd;
+    color: #000;
+    padding: 8px 16px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    border: 1px solid #999;
 }
 
 /* Form container styling */
 form {
-background: white;
-padding: 1em;
-margin-bottom: 2em;
-border-radius: 4px;
+    background: white;
+    padding: 1em;
+    margin-bottom: 2em;
+    border-radius: 4px;
 }
 
 /* Style for form controls */
@@ -27,16 +45,16 @@ form input,
 form select,
 form textarea,
 form button {
-display: block;
-width: 100%;
-margin-bottom: 10px;
-padding: 8px;
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 8px;
 }
 
 /* List styling */
 ul {
-list-style: none;
-padding: 0;
+    list-style: none;
+    padding: 0;
 }
 
 fieldset#genreCheckboxes {
@@ -54,15 +72,15 @@ fieldset#genreCheckboxes {
 /* Genre tag badges */
 .genre-badge {
     display: inline-block;
-    background-color: #eee;
-    color: #333;
+    background-color: #636363;
+    color: #eee;
     padding: 2px 8px;
     margin: 2px;
     border-radius: 12px;
     font-size: 0.85em;
 }
 
-/* Toggle style (basic, improve later) */
+/* Toggle style */
 .theme-toggle {
     display: flex;
     align-items: center;
@@ -77,10 +95,23 @@ body.dark-mode {
     color: #f0f0f0;
 }
 
+body.dark-mode main, body.dark-mode section {
+    padding-top: .5em;
+    padding-bottom: .5em;
+    margin-top: .5em;
+    margin-bottom: .5em;
+}
+
 body.dark-mode form,
 body.dark-mode header {
     background: #1e1e1e;
     color: #f0f0f0;
+}
+
+body.dark-mode .entry-button {
+    background-color: #2c2c2c;
+    color: #f0f0f0;
+    border: 1px solid #555;
 }
 
 body.dark-mode input,
@@ -94,6 +125,6 @@ body.dark-mode button {
 
 /* Dark mode genre badge */
 body.dark-mode .genre-badge {
-    background-color: #444;
+    background-color: #636363;
     color: #eee;
 }
