@@ -21,7 +21,10 @@ function renderEntries() {
 
     const filteredEntries = getFilteredEntries();
 
-    filteredEntries.forEach((entry, index) => {
+    filteredEntries.forEach((entry) => {
+        // Find this entry's index in the full list (by reference)
+        const index = mediaList.indexOf(entry);
+
         const li = document.createElement("li");
         li.innerHTML = `
             <strong>${entry.title}</strong> (${entry.type} - ${entry.subType}, ${entry.status})<br/>

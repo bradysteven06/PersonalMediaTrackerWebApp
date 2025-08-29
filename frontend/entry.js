@@ -19,7 +19,18 @@ let mediaList = JSON.parse(localStorage.getItem("mediaList")) || [];
 // If editing, load existing entry and fill the form
 if (isEditMode) {
     const entry = mediaList[editIndex];
-    if (!entry) window.location.href = "index.html";
+    if (!entry) {
+        const container = document.getElementById("mediaForm") || document.body;
+        const notice = document.createElement('div');
+        notice.className = 'alert';
+        notice.textContent = 'Could not find that entry to edit. ';
+        const back = document.createElement('a');
+        back.href = 'index.html';
+        back.textContent = 'Return to the list';
+        notice.appendChild(back);
+        container.prepend(notice);
+        throw new Error('Edit aborted: entry not found');
+    }
 
     document.getElementById("formTitle").textContent = "Edit Entry";
     submitBtn.textContent = "Save Changes";
