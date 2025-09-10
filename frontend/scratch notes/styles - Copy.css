@@ -48,10 +48,6 @@ form input, form select, form textarea, form button {
     padding: 8px;
 }
 
-form input {
-    width: 98.7%;
-}
-
 /* List styling */
 ul {
     list-style: none;
@@ -90,7 +86,7 @@ fieldset#genreCheckboxes {
     margin-right: 10px;
 }
 
-/* Dark mode base */
+/* Dark mod base */
 body.dark-mode {
     background: #121212;
     color: #f0f0f0;
@@ -103,18 +99,13 @@ body.dark-mode main, body.dark-mode section {
     margin-bottom: .5em;
 }
 
-body.dark-mode form, body.dark-mode header {
-    background: #1e1e1e;
-    color: #f0f0f0;
-}
-
 body.dark-mode .entry-button {
     background-color: #2c2c2c;
     color: #f0f0f0;
     border: 1px solid #555;
 }
 
-body.dark-mode input,
+body.dark-mod input,
 body.dark-mode select,
 body.dark-mode textarea,
 body.dark-mode button {

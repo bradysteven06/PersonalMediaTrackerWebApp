@@ -8,19 +8,18 @@ const rating = document.getElementById("rating");
 const notes = document.getElementById("notes");
 const submitBtn = document.getElementById("submitBtn");
 const cancelBtn = document.getElementById("cancelBtn");
-const stayOnPageCheckbox = document.getElementById("stayOnPage");
-const stayCheckboxContainer = document.getElementById("stayCheckboxContainer");
+const stayOnPageCheckbox = document.getElementById("stayCheckboxContainer");
 const formTitleEl = document.getElementById("formTitle");
 const genresContainer = document.getElementById("genreCheckboxes"); // parent div for genre checkboxes
 
 // ----- URL params (id-based) -----
 const urlParams = new URLSearchParams(window.location.search);
-const mode = (urlParams.get("mode") || "add").toLowerCase(); // "add" or "edit"
+const mode = (urlParams.get("mod") || "add").toLowerCase(); // "add" or "edit"
 const editId = urlParams.get("id"); // used only when mode === "edit"
 const isEditMode = mode === "edit";
 
 // ----- Load data once -----
-let mediaList = JSON.parse(localStorage.getItem("mediaList") || "[]");
+let mediaList = JSON.parst(localStorage.getItem("mediaList") || "[]");
 
 // ----- Helpers -----
 // UUID helper: prefer crypto.randomUUID(), fallback for older browser

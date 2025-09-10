@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Personal Media Tracker</title>
-    <link rel="stylesheet" href="styles.css" />
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>Personal Media Tracker</title>
+        <link rel="stylesheet" href="styles.css" />
     </head>
     <body>
         <header>
@@ -18,21 +18,21 @@
         <main>
             <!-- New Entry button to navigate to entry form -->
             <div id="new-entry">
-            <a href="entry.html" class="entry-button">+ New Entry</a>
+                <a href="entry.html" class="entry-button">+ New Entry</a>
             </div>
-            
-            <!-- Section for filtering options-->
+
+            <!-- Section for filtering options -->
             <section id="filter-section">
                 <h2>Filter Entries</h2>
-                
-                <label for="filterType">Type:</label>
+
+                <lable for="filterType">Type:</lable>
                 <select id="filterType">
                     <option value="">All</option>
                     <option value="movie">Movie</option>
                     <option value="series">Series</option>
                 </select>
-                
-                <label for="filterSubType">SubType:</label>
+
+                <label for="filterSubType">Subtype:</label>
                 <select id="filterSubType">
                     <option value="">All</option>
                     <option value="anime">Anime</option>
@@ -41,12 +41,12 @@
                     <option value="documentary">Documentary</option>
                     <option value="manga">Manga</option>
                 </select>
-                
-                <label for="filterGenre">Genre:</label>
+
+                <lable for="filterGenre">Genre:</lable>
                 <select id="filterGenre">
                     <option value="">All</option>
                     <option value="action">Action</option>
-                    <option value="adventure">Adventure</option>
+                    <option value="adventrue">Adventure</option>
                     <option value="comedy">Comedy</option>
                     <option value="drama">Drama</option>
                     <option value="fantasy">Fantasy</option>
@@ -55,25 +55,25 @@
                     <option value="horror">Horror</option>
                     <option value="mystery">Mystery</option>
                 </select>
-                
-                <!-- Sorting control-->
-                <label for="sortBy">Sort By:</label>
-                <select id="sortBy">
-                    <option value="">None</option>
-                    <option value="title">Title (A → Z)</option>
-                    <option value="rating">Rating (High → Low)</option>
-                    <option value="status">Status (A → Z)</option>
-                </select>
             </section>
+
+            <!-- Sorting control-->
+            <label for="sortBy">Sort By:</label>
+            <select id="sortBy">
+                <option value="">None</option>
+                <option value="title">Title</option>
+                <option value="rating">Rating</option>
+                <option value="status">Status</option>
+            </select>
 
             <!-- Section where the media list is rendered -->
             <section id="media-list">
-            <h2>My Media List</h2>
-            <ul id="entriesContainer"></ul>
+                <h2>My Media List</h2>
+                <ul id="entriesContainer"></ul>
             </section>
         </main>
 
-        <!-- Link to the JavaScript file -->
+        <!-- Link to the JavaScript file-->
         <script src="app.js"></script>
     </body>
 </html>

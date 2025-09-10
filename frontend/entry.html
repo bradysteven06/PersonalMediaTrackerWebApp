@@ -1,72 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Add / Edit Entry</title>
-    <link rel="stylesheet" href="styles.css" />
-</head>
-<body>
-<header>
-    <h1 id="formTitle">Add New Entry</h1>
-    <label class="theme-toggle">
-            <input type="checkbox" id="darkModeToggle" />
-            <span>Dark Mode</span>
-    </label>
-</header>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>Add / Edit Entry</title>
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+        <header>
+            <h1 id="formTitle">Add New Entry</h1>
+            <label class="theme-toggle">
+                <input type="checkbox" id="darkModeToggle" />
+                <span>Dark Mode</span>
+            </label>
+        </header>
 
-<main>
-    <!-- Shared form for both Add and Edit -->
-    <form id="mediaForm">
-        <input type="text" id="title" placeholder="Title" required />
+        <main>
+            <!-- Shared form for both Add and Edit -->
+            <form id="mediaForm">
+                <input type="text" id="title" placeholder="Title" required />
 
-        <select id="type">
-            <option value="movie">Movie</option>
-            <option value="series">Series</option>
-        </select>
+                <select id="type">
+                    <option value="movie">Movie</option>
+                    <option value="series">Series</option>
+                </select>
 
-        <select id="subType">
-            <option value="anime">Anime</option>
-            <option value="live-action">Live Action</option>
-            <option value="animated">Animated</option>
-            <option value="documentary">Documentary</option>
-            <option value="manga">Manga</option>
-        </select>
+                <select id="subType">
+                    <option value="anime">Anime</option>
+                    <option value="live-action">Live Action</option>
+                    <option value="animated">Animated</option>
+                    <option value="documentary">Documentary</option>
+                    <option value="manga">Manga</option>
+                </select>
 
-        <fieldset id="genreCheckboxes">
-        <legend>Genres</legend>
-            <label><input type="checkbox" value="action"> Action</label>
-            <label><input type="checkbox" value="adventure"> Adventure</label>
-            <label><input type="checkbox" value="comedy"> Comedy</label>
-            <label><input type="checkbox" value="drama"> Drama</label>
-            <label><input type="checkbox" value="fantasy"> Fantasy</label>
-            <label><input type="checkbox" value="romance"> Romance</label>
-            <label><input type="checkbox" value="sci-fi"> Sci-Fi</label>
-            <label><input type="checkbox" value="horror"> Horror</label>
-            <label><input type="checkbox" value="mystery"> Mystery</label>
-        </fieldset>
+                <fieldset id="genreCheckboxes">
+                    <legend>Genres</legend>
+                    <label><input type="checkbox" value="action">Action</label>
+                    <label><input type="checkbox" value="adventure">Adventure</label>
+                    <label><input type="checkbox" value="comedy">Comedy</label>
+                    <label><input type="checkbox" value="drama">Drama</label>
+                    <label><input type="checkbox" value="fantasy">Fantasy</label>
+                    <label><input type="checkbox" value="romance">Romance</label>
+                    <label><input type="checkbox" value="sci-fi">Sci-Fi</label>
+                    <label><input type="checkbox" value="horror">Horror</label>
+                    <label><input type="checkbox" value="mystery">Mystery</label>
+                </fieldset>
 
-        <select id="status">
-            <option value="watching">Watching / Reading</option>
-            <option value="completed">Completed</option>
-            <option value="on-hold">On-Hold</option>
-            <option value="dropped">Dropped</option>
-            <option value="plan-to-watch">Plan to Watch / Read</option>
-        </select>
+                <select id="status">
+                    <option value="watching">Watching / Reading</option>
+                    <option value="completed">Completed</option>
+                    <option value="on-hold">On-Hold</option>
+                    <option value="dropped">Dropped</option>
+                    <option value="plan-to-watch">Plan to Watch / Read</option>
+                </select>
 
-        <input type="number" id="rating" placeholder="Rating (1–10)" min="1" max="10" />
-        <textarea id="notes" placeholder="Notes..."></textarea>
+                <!-- Visible only in Add mode -->
+                <label id="stayCheckboxContainer">
+                    <input type="checkbox" id="stayOnPage" /> Stay on this page after adding
+                </label>
+                <button type="submit" id="submitBtn">Add Entry</button>
+                <button type="button" id="cancelBtn">Cancel</button>
+            </form>
+        </main>
 
-        <!-- Visible only in Add mode -->
-        <label id="stayCheckboxContainer">
-            <input type="checkbox" id="stayOnPage" /> Stay on this page after adding
-        </label>
-
-        <button type="submit" id="submitBtn">Add Entry</button>
-        <button type="button" id="cancelBtn">Cancel</button>
-    </form>
-</main>
-
-<script src="entry.js"></script>
-</body>
+        <!-- Link to the JavaScript file-->
+        <script src="entry.js"></script>
+    </body>
 </html>

@@ -23,7 +23,7 @@ function saveToLocalStorage() {
 
 /*
  * Assign a stable 'id' to every entry that doesn't have one yet.
- * This is an in-place, idempotent migration (safe to call every load).
+ * This is an in-place, idempotent migration (sage to call every load).
 */
 function ensureEntryIds(list) {
     const uuid = () =>
@@ -171,7 +171,7 @@ function deleteEntryById(id) {
     renderEntries();
 }
 
-// Event delegation for Edit/Delete buttons rendered inside entriesContainer
+// Even delegation for Edit/Delete buttons rendered inside entriesContainer
 if (entriesContainer) {
     entriesContainer.addEventListener("click", (e) => {
         const btn = e.target.closest("button[data-action]");
@@ -239,7 +239,7 @@ if (mediaList.length === 0) {
 renderEntries();
 
 // ---------------------
-// Dark mode persistence
+// Dard mod persistence
 // ---------------------
 const prefersDark = localStorage.getItem("darkMode") === "true";
 
