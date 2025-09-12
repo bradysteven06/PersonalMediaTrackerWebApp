@@ -1,9 +1,39 @@
+/* CSS variable for colors/spacing/typography */
+:root {
+    --bg: #f2f2f2;
+    --bg-card: @fff;
+    --text: #111;
+    --muted: #666;
+    --border: #d0d0d0;
+    --radius: 12px;
+
+    --space-1: .5rem; /* 8px */
+    --space-2: .75rem; /* 12px */
+    --space-3: 1rem; /* 16px */
+    --space-4: 1.25rem; /* 20px */
+    --space-5: 1.5rem; /* 24px */
+
+    /* Fluid type scale using clamp(min, vw, max) for responsive text */
+    --fs-sm: clamp(.875rem, .8rem + .25vw, .95rem);
+    --fs-md: clamp(1rem, .95rem + .3vw, 1.1rem);
+    --fs-lg: clamp(1.15rem, 1.05rem + .6vw, 1.5rem);
+}
+
+
+/* Keep box sizing predictable across components */
+html { box-sizing: border-box;}
+*, *::before, *::after {box-sizing: inherit;}
+
+
 /* Basic layout and body styling */
 body {
     font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 20px;
-    background: #f2f2f2;
+    margin: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    padding: var(--space-3);
+    background: var(--bg);
+    color: var(--text);
+    font-size: var(--fs-md);
+    line-height: 1.5;
 }
 
 main, section {
@@ -13,62 +43,172 @@ main, section {
     margin-bottom: .5em;
 }
 
+
+/* Container to center content and limit max width on large screens */
+.container {
+    max-width: 1080px;      /* prevents edge-to-edge on desktop */
+    margin-inline: auto;
+    padding-inline: var(--space-3);
+}
+
+
 /* Header bar */
 header {
     background: #333;
     color: white;
-    padding: 1em;
-    text-align: center;
+    padding: var(--space-3);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
 }
 
 .entry-button {
     display: inline-block;
     background-color: #ddd;
     color: #000;
-    padding: 8px 16px;
-    border-radius: 5px;
+    padding: .6rem .9rem;
+    border-radius: 10px;
     text-decoration: none;
-    font-weight: bold;
-    border: 1px solid #999;
+    font-weight: 600;
+    border: 1px solid var(--border);
 }
+
+
+/* Theme toggle */
+.theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    margin: 0;
+}
+
 
 /* Form container styling */
 form {
-    background: white;
-    padding: 1em;
-    margin-bottom: 2em;
-    border-radius: 4px;
+    background: var(--bg-card);
+    padding: var(--space-3);
+    margin-bottom: var(--space-5);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    max-width: 760px;       /* keeps for narrow */
 }
+
 
 /* Style for form controls */
 form input, form select, form textarea, form button {
     display: block;
     width: 100%;
-    margin-bottom: 10px;
-    padding: 8px;
+    margin-bottom: var(--space-2);
+    padding: .5rem .6rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    min-height: 44px;           /* accessibility tap target */
+    font-size: var(--fs-md);
 }
 
-form input {
-    width: 98.7%;
-}
 
-/* List styling */
+/* List styling - Responsive grid "cards" */
 ul {
     list-style: none;
     padding: 0;
 }
 
+#media-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: var(--space-3);
+}
+
+/* 1-col on mobile; auto-fit into more columns as space allows */
+@media (min-width: 520px) {
+    #media-list ul { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+}
+
+
+/* Card styling for each entry */
+.entry-row {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: var(--space-3);
+}
+
+.entry-main {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    align-items: baseline;
+}
+
+.entry-main strong { font-size: var(--fs-md); }
+.entry-meta { color: var(--muted); font-size: var(--fs-sm); }
+.entry-sub, .entry-notes { margin-top: .35rem; overflow-wrap: anywhere; }
+.entry-actions { margin-top: var(--space-2); display: flex; gap: .5rem; flex-wrap: wrap; }
+
+
+/* Buttons for actions */
+.btn {
+    padding: .5rem .75rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    cursor: pointer;
+}
+.btn:hover { filter: brightness(.98); }
+.btn-danger { background: #ffe8e8; border-color: #ffb8b8;}
+
+
+/* Filters layout */
+.filters {
+    background: var(--bg-card);
+    padding: var(--space-3);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+}
+
+.filters-grid {
+    display: grid;
+    gap: var(--space-2);
+    grid-template-columns: 1fr;         /* stack on mobile */
+}
+
+/* 2 columns on tablets, 4 on desktop */
+@media (min-width: 640px) {
+    .filters-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 900px) {
+    .filters-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+label { font-size: var(--fs-sm); color: var(--muted); }
+
+
+/* Genre checkbox fieldset */
 fieldset#genreCheckboxes {
     margin-bottom: 15px;
-    padding: 10px;
-    border: 1px solid #ccc;
+    padding: var(--space-2);
+    border: 1px solid var(--border);
 }
 
 #genreCheckboxes label {
-    display: inline-block;
-    margin-right: 10px;
-    margin-bottom: 5px;
+    display: inline-flex;           /* align checkbox + text */
+    align-items: center;
+    gap: .4rem;
+    margin-right: .75rem;
+    margin-bottom: .5rem;
 }
+
+/* Multi-column for genre options on larger screens */
+@media (min-width: 520px) {
+    #genreCheckboxes { column-count: 2; column-gap: 1rem; }
+    #genreCheckboxes label {break-inside: avoid; }
+}
+@media (min-width: 900px) {
+    #genreCheckboxes { column-count: 3; }
+}
+
 
 /* Genre tag badges */
 .genre-badge {
@@ -77,23 +217,17 @@ fieldset#genreCheckboxes {
     color: #eee;
     padding: 2px 8px;
     margin: 2px;
-    border-radius: 12px;
-    font-size: 0.85em;
+    border-radius: 999px;
+    font-size: var(--fs-sm);
 }
 
-/* Toggle style */
-.theme-toggle {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    float: right;
-    margin-right: 10px;
-}
-
-/* Dark mode base */
+/* Dark mode */
 body.dark-mode {
-    background: #121212;
-    color: #f0f0f0;
+    --bg: #121212;
+    --bg-card: #1e1e1e;
+    --text: #f0f0f0;
+    --muted: #b8b8b8;
+    --border: #3a3a3a;
 }
 
 body.dark-mode main, body.dark-mode section {
@@ -103,28 +237,14 @@ body.dark-mode main, body.dark-mode section {
     margin-bottom: .5em;
 }
 
-body.dark-mode form, body.dark-mode header {
-    background: #1e1e1e;
-    color: #f0f0f0;
-}
-
 body.dark-mode .entry-button {
     background-color: #2c2c2c;
-    color: #f0f0f0;
-    border: 1px solid #555;
+    color: var(--text);
+    border: 1px solid var(--border);
 }
 
-body.dark-mode input,
-body.dark-mode select,
-body.dark-mode textarea,
-body.dark-mode button {
-    background-color: #2c2c2c;
-    color: #f0f0f0;
-    border: 1px solid #555;
-}
 
-/* Dark mode genre badge */
-body.dark-mode .genre-badge {
-    background-color: #636363;
-    color: #eee;
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
