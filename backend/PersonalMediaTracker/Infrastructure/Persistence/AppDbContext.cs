@@ -79,7 +79,10 @@ namespace Infrastructure.Persistence
 
             // Optional single-column indexes can help some queries
             entryTag.HasIndex(et => et.MediaEntryId);
-            entryTag.HasIndex(et => et.TagId);            
+            entryTag.HasIndex(et => et.TagId);       
+            
+            // Match the principals' global filters so the join never "sees" filtered principals
+            entryTag.HasQueryFilter(et => !et.MediaEntry.IsDeleted && !et.Tag.IsDeleted);
         }
 
         // Audit + Soft-delete handling.
