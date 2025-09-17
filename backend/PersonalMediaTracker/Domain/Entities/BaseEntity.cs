@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
 namespace Domain.Entities
 {
@@ -13,7 +9,7 @@ namespace Domain.Entities
         public Guid Id { get; set; } = Guid.NewGuid();
 
         // Audit timestamps are always UTC to avoid timezone confusion
-        public DateTime CreateedAtUtc { get; set; }
+        public DateTime CreatedAtUtc { get; set; }
         public DateTime UpdatedAtUtc { get; set; }
 
         // Soft-delete
