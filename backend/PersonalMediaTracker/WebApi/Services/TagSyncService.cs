@@ -47,7 +47,7 @@ namespace WebApi.Services
 
                 if (newTagNames.Count > 0)
                 {
-                    var newTags = newTagNames.Select(n => new Tag {UserId = userId, Name = n }).ToList();
+                    var newTags = newTagNames.Select(n => new Tag { UserId = userId, Name = n }).ToList();
                     _db.Tags.AddRange(newTags);
                     existingTags.AddRange(newTags);
                 }
