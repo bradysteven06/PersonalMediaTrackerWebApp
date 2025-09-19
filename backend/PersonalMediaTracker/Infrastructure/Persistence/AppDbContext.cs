@@ -48,6 +48,7 @@ namespace Infrastructure.Persistence
             // Helpful indexes for common filters
             entry.HasIndex(e => new { e.UserId, e.Type });
             entry.HasIndex(e => new { e.UserId, e.Status });
+            entry.HasIndex(e => new { e.UserId, e.UpdatedAtUtc });
 
             // Global soft-delete filter (hides deleted rows by default)
             entry.HasQueryFilter(e => !e.IsDeleted);
@@ -58,7 +59,7 @@ namespace Infrastructure.Persistence
             var tag = modelBuilder.Entity<Tag>();
             tag.ToTable("Tags");
             tag.HasKey(t => t.Id);
-            tag.Property(t => t.Name).HasMaxLength(50).IsRequired();
+            tag.Property(t => t.Name).HasMaxLength(64).IsRequired();
             tag.HasIndex(t => new { t.UserId, t.Name }).IsUnique();     // prevent duplicate tag names per user
             tag.HasQueryFilter(t => !t.IsDeleted);                      // global soft-delete filter
 
@@ -83,6 +84,10 @@ namespace Infrastructure.Persistence
             
             // Match the principals' global filters so the join never "sees" filtered principals
             entryTag.HasQueryFilter(et => !et.MediaEntry.IsDeleted && !et.Tag.IsDeleted);
+
+
+            modelBuilder.Entity<MediaEntry>().Property(e => e.RowVersion).IsRowVersion();
+            modelBuilder.Entity<Tag>().Property(e => e.RowVersion).IsRowVersion();
         }
 
         // Audit + Soft-delete handling.

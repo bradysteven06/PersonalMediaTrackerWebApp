@@ -15,5 +15,8 @@ namespace Domain.Entities
         // Soft-delete
         public bool IsDeleted { get; set; }
         public DateTime? DeletedAtUtc { get; set; }
+
+        // Optimistic concurrency stamp, configured as a rowversion in EF
+        public byte[]? RowVersion { get; set; }
     }
 }
