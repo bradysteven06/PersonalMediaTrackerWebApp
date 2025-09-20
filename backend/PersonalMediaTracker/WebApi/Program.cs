@@ -17,9 +17,20 @@ var connStr = builder.Configuration.GetConnectionString("DefaultConnection")
 builder.Services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(connStr));
 builder.Services.AddScoped<TagSyncService>();
 
-// DEV: wide-open CORS so the frontend on another port can call the API.
-// TODO: PROD: replae AllowAnyOrigin() with WthOrigins("https://your-frontend.com")
-builder.Services.AddCors(p => p.AddDefaultPolicy(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+// CORS: allow your local front-end dev servers
+builder.Services.AddCors(opts =>
+{
+    opts.AddPolicy("Frontend", p => p
+        .WithOrigins(
+            "http://localhost:5500",    // VS Code Live Server
+            "http://127.0.0.1:5500",
+            "http://localhost:5173",    // Vite/React
+            "https://localhost:5173",
+            "http://localhost:3000",
+            "https://localhost:3000")
+        .AllowAnyHeader()
+        .AllowAnyMethod());
+});
 
 var app = builder.Build();
 
@@ -31,7 +42,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseCors();
+app.UseCors("Frontend");   // <-- CORS must run before MapControllers()
 
 // quick health endpoint
 app.MapGet("/health", () => Results.Ok(new { status = "ok", timeUtc = DateTime.UtcNow }));
