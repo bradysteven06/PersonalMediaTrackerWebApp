@@ -1,5 +1,6 @@
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using WebApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,7 @@ builder.Services.AddSwaggerGen();
 var connStr = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("Missing 'DefaultConnection'.");
 builder.Services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(connStr));
+builder.Services.AddScoped<TagSyncService>();
 
 // DEV: wide-open CORS so the frontend on another port can call the API.
 // TODO: PROD: replae AllowAnyOrigin() with WthOrigins("https://your-frontend.com")
