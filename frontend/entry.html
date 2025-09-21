@@ -63,7 +63,11 @@
             </form>
         </main>
 
+        <script>
+            // Configure the API base URL once for all frontend calls.
+            window.APP_CONFIG = { apiBaseUrl: "https://localhost:7143"};
+        </script>
         <!-- Link to the JavaScript file-->
-        <script src="entry.js"></script>
+        <script type="module" src="entry.js"></script>
     </body>
 </html>
