@@ -9,7 +9,7 @@
         public string Type { get; set; } = string.Empty;        // enum as string
         public string Status { get; set; } = string.Empty;     // enum as string
         public byte? Rating { get; set; }
-        public int Progress { get; set; }
+        public int? Progress { get; set; }
         public int? Total { get; set; }
         public DateTime? StartedAt { get; set; }
         public DateTime? FinishedAt { get; set; }

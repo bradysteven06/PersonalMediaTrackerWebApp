@@ -8,7 +8,7 @@ namespace Domain.Entities
         public MediaType Type { get; set; }             // anime/manga/movie/tv
         public EntryStatus Status { get; set; }         // planning/watching/etc.
         public byte? Rating { get; set; }               // 0-10, nullable
-        public int Progress { get; set; }               // episodes/chapters seen
+        public int? Progress { get; set; }               // episodes/chapters seen
         public int? Total { get; set; }                 // total episodes or chapters, if known
 
         public DateTime? StartedAt { get; set; }

@@ -10,7 +10,7 @@ async function http(method, path, body) {
         body: body ? JSON.stringify(body) : undefined,
     });
     if (!res.ok) {
-        // Try to surface ProblemDetails (or plain text) clearly
+        // Try to surface Problem Details (or plain text) clearly
         let detail = "";
         try { const p = await res.json(); detail = p?.detail || p?.title || JSON.stringify(p); }
         catch { detail = await res.text(); }

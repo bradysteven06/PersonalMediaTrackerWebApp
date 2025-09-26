@@ -42,6 +42,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+
 app.UseCors("Frontend");   // <-- CORS must run before MapControllers()
 
 // quick health endpoint

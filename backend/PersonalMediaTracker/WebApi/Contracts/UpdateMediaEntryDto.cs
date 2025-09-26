@@ -22,7 +22,7 @@ namespace WebApi.Contracts
         public byte? Rating { get; set; }
 
         [Range(0, int.MaxValue)]
-        public int Progress { get; set; }
+        public int? Progress { get; set; }
 
         [Range(0, int.MaxValue)]
         public int? Total { get; set; }
