@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.Contracts;
 
 namespace WebApi.Contracts
 {
@@ -11,21 +12,16 @@ namespace WebApi.Contracts
         // These are strings in the DTO so clients don't need to know the enum ints.
         // parsed/validated in the mapping layer.
         [Required]
-        public string Type { get; set; } = "Anime"; // matches enum names: Anime/Manga/Movie/Tv
+        public string Type { get; set; } = default!;
+
         [Required]
-        public string Status { get; set; } = "Planning";
+        public string? SubType {  get; set; }
+
+        [Required]
+        public string Status { get; set; } = default!;
 
         [Range(0, 10)]
-        public byte? Rating { get; set; }
-
-        [Range(0, int.MaxValue)]
-        public int? Progress { get; set; }
-
-        [Range(0, int.MaxValue)]
-        public int? Total { get; set; }
-
-        public DateTime? StartedAt { get; set; }
-        public DateTime? FinishedAt { get; set; }
+        public int? Rating { get; set; }
 
         [StringLength(2000)]
         public string? Notes { get; set; }
