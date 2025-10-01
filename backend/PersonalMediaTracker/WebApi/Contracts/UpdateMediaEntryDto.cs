@@ -29,6 +29,6 @@ namespace WebApi.Contracts
         public string? Notes { get; set; }
 
         // Optional, if null will be treated as empty
-        public List<string>? Tags { get; set; }
+        public IEnumerable<string>? Tags { get; set; }
     }
 }
