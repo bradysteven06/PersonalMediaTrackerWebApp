@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Domain.Enums;
 using System.Diagnostics.Contracts;
 
 namespace WebApi.Contracts
@@ -9,16 +10,11 @@ namespace WebApi.Contracts
         [Required, StringLength(200)]
         public string Title { get; set; } = string.Empty;
 
-        // These are strings in the DTO so clients don't need to know the enum ints.
-        // parsed/validated in the mapping layer.
-        [Required]
-        public string Type { get; set; } = default!;
+        public EntryType Type { get; set; }
 
-        [Required]
-        public string? SubType {  get; set; }
+        public EntrySubType? SubType {  get; set; }
 
-        [Required]
-        public string Status { get; set; } = default!;
+        public EntryStatus Status { get; set; }
 
         [Range(0, 10)]
         public int? Rating { get; set; }
@@ -26,7 +22,6 @@ namespace WebApi.Contracts
         [StringLength(2000)]
         public string? Notes { get; set; }
 
-        // Optional, if null will be treated as empty
         public IEnumerable<string>? Tags { get; set; }
     }
 }

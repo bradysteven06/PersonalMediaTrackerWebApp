@@ -97,7 +97,7 @@ namespace WebApi.Controllers
             // Page + map
             var total = await query.CountAsync(ct);
             var items = await query.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync(ct);
-            var dtos = items.Select(e => e.ToResponse()).ToArray();
+            var dtos = items.Select(e => e.ToDto()).ToArray();
 
             return Ok(new PagedResult<MediaEntryDto>(dtos, total, page, pageSize));
         }
@@ -116,7 +116,7 @@ namespace WebApi.Controllers
             {
                 return NotFound();
             }
-            return Ok(entity.ToResponse());
+            return Ok(entity.ToDto());
         }
 
         // POST: api/mediaentries
@@ -150,7 +150,7 @@ namespace WebApi.Controllers
             // Return freshly loaded resource
             var fresh = await _db.MediaEntries.AsNoTracking().Include(e => e.EntryTags)!.ThenInclude(et => et.Tag).FirstAsync(e => e.Id == entity.Id, ct);
 
-            return CreatedAtAction(nameof(GetById), new { id = fresh.Id }, fresh.ToResponse());
+            return CreatedAtAction(nameof(GetById), new { id = fresh.Id }, fresh.ToDto());
         }
 
         // PUT: api/mediaentries/{id}
@@ -197,7 +197,7 @@ namespace WebApi.Controllers
             // Return updated shape
             var fresh = await _db.MediaEntries.AsNoTracking().Include(e => e.EntryTags)!.ThenInclude(et => et.Tag).FirstAsync(e => e.Id == id, ct);
 
-            return Ok(fresh.ToResponse());
+            return Ok(fresh.ToDto());
         }
 
         // DELETE: api/mediaentries/{id}

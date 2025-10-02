@@ -8,7 +8,7 @@ namespace Domain.Entities
         public Guid UserId { get; set; }                // multi-tenant boundary
         public string Title { get; set; } = string.Empty;
         public EntryType Type { get; set; }             // movie / series
-        public EntrySubType SubType { get; set; }       // live-action / anime / manga ....
+        public EntrySubType? SubType { get; set; }       // live-action / anime / manga ....
         public EntryStatus Status { get; set; }         // planning/watching/etc.
         public int? Rating { get; set; }               // 0-10, nullable
 
