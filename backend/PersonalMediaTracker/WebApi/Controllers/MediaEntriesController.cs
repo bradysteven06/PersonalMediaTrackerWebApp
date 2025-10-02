@@ -12,7 +12,6 @@ using WebApi.Services;
 // - Uses DTOs (CreateMediaEntryDto, UpdateMediaEntryDto, MediaEntryDto) and mappers.
 // - Respects multi-tenancy via UserId (stubbed helper, replace with real auth when ready). --TODO--
 // - Uses TagSyncService to attach/detach many-to-many tag rows.
-// - Soft-delete happens automatically in AppDbContext (override SaveChanges converts deletes).
 
 namespace WebApi.Controllers
 {
@@ -32,6 +31,7 @@ namespace WebApi.Controllers
         // GET: api/mediaentries
         [HttpGet]
         [ProducesResponseType(typeof(PagedResult<MediaEntryDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> List(
             [FromQuery] string? q,
             [FromQuery] string? type,
@@ -64,35 +64,65 @@ namespace WebApi.Controllers
                     (e.Notes != null && EF.Functions.Like(e.Notes, $"%{term}%")));
             }
 
-            // Filter by enum-as-string DTO values mapped to entity enums at write-time
+            // Enum filters: parse strings into real enums with ignoreCase=true
             if (!string.IsNullOrWhiteSpace(type))
             {
-                var t = type.Trim();
-                query = query.Where(e => e.Type.ToString() == t);
+                if (!Enum.TryParse<Domain.Enums.EntryType>(type.Trim(), true, out var parsedType))
+                {
+                    return BadRequest(new ProblemDetails
+                    {
+                        Title = "invalid 'type' filter',",
+                        Detail = $"'{type}' is not async valid EntryType."
+                    });
+                }
+                query = query.Where(e => e.Type == parsedType);
             }
 
             if (!string.IsNullOrWhiteSpace(status))
             {
-                var s = status.Trim();
-                query = query.Where(e => e.Status.ToString() == s);
+                if (!Enum.TryParse<Domain.Enums.EntryStatus>(status.Trim(), true, out var parsedStatus))
+                {
+                    return BadRequest(new ProblemDetails
+                    {
+                        Title = "invalid 'status' filter',",
+                        Detail = $"'{status}' is not async valid EntryType."
+                    });
+                }
+                query = query.Where(e => e.Status == parsedStatus);
             }
 
             if (!string.IsNullOrWhiteSpace(tag))
             {
                 var tname = tag.Trim().ToLowerInvariant();
-                query = query.Where(e => e.EntryTags.Any(et => et.Tag.Name.ToLowerInvariant() == tname));
+                query = query.Where(e => e.EntryTags.Any(et => et.Tag.Name.ToLower() == tname));
             }
 
             // Sorting
             var asc = string.Equals(dir, "asc", StringComparison.OrdinalIgnoreCase);
-            query = sort.ToLowerInvariant() switch
+            switch ((sort ?? "updated").Trim().ToLowerInvariant())
             {
-                "title" => asc ? query.OrderBy(e => e.Title) : query.OrderByDescending(e => e.Title),
-                "created" => asc ? query.OrderBy(e => e.CreatedAtUtc) : query.OrderByDescending(e => e.CreatedAtUtc),
-                "updated" => asc ? query.OrderBy(e => e.UpdatedAtUtc) : query.OrderByDescending(e => e.UpdatedAtUtc),
-                "rating" => asc ? query.OrderBy(e => e.Rating) : query.OrderByDescending(e => e.Rating),
-                _ => asc ? query.OrderBy(e => e.UpdatedAtUtc) : query.OrderByDescending(e => e.UpdatedAtUtc)
-            };
+                case "title":
+                    query = asc ? query.OrderBy(e => e.Title) : query.OrderByDescending(e => e.Title);
+                    break;
+
+                case "created":
+                    query = asc ? query.OrderBy(e => e.CreatedAtUtc) : query.OrderByDescending(e => e.CreatedAtUtc);
+                    break;
+
+                case "rating":
+                    // Push null ratings to the end consistently, then sort by rating
+                    // DESC: non-null first (false), then by rating desc
+                    // ASC:  nulls last (true), then by rating asc
+                    query = asc
+                        ? query.OrderBy(e => e.Rating == null).ThenBy(e => e.Rating)
+                        : query.OrderBy(e => e.Rating == null).ThenByDescending(e => e.Rating);
+                    break;
+
+                case "updated":
+                default:
+                    query = asc ? query.OrderBy(e => e.UpdatedAtUtc) : query.OrderByDescending(e => e.UpdatedAtUtc);
+                    break;
+            }
 
             // Page + map
             var total = await query.CountAsync(ct);
@@ -136,7 +166,12 @@ namespace WebApi.Controllers
             var (entity, err) = dto.ToEntity(userId);
             if (err is not null)
             {
-                return BadRequest(new ProblemDetails { Title = "Validation error", Detail = err, Status = StatusCodes.Status400BadRequest });
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Validation error",
+                    Detail = err,
+                    Status = StatusCodes.Status400BadRequest
+                });
             }
 
             // Persist entry first (auditing timestamps set in SaveChanges)
@@ -165,9 +200,15 @@ namespace WebApi.Controllers
                 return ValidationProblem(ModelState);
             }
 
+            // Keep route/body ids consistent if client sends both
             if (dto.Id != Guid.Empty && dto.Id != id)
             {
-                return BadRequest(new ProblemDetails { Title = "Validation error", Detail = "Body Id does not match route id.", Status = StatusCodes.Status400BadRequest });
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Validation error",
+                    Detail = "Body Id does not match route id.",
+                    Status = StatusCodes.Status400BadRequest
+                });
             }
 
             var userId = GetUserId();
@@ -182,9 +223,14 @@ namespace WebApi.Controllers
 
             // Apply incoming fields (validates enums + cross-field rules)
             var err = dto.ApplyTo(entity);
-            if ( (err is not null))
+            if (err is not null)
             {
-                return BadRequest(new ProblemDetails { Title = "Validation error", Detail = err, Status = StatusCodes.Status400BadRequest });
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Validation error",
+                    Detail = err,
+                    Status = StatusCodes.Status400BadRequest
+                });
             }
 
             // Save scalar changes
@@ -229,7 +275,7 @@ namespace WebApi.Controllers
         {
             // Example: var sub = User.FindFirstValue(ClaimTypes.NameIdentifier);
             // return Guid.Parse(sub);
-            return Guid.Empty; // DEV placeholder
+            return Guid.Empty; // DEV placeholder (ensure seed/test data uses Guid.Empty)
         }
     }
 
