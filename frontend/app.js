@@ -23,15 +23,23 @@ function escapeHTML(s) {
         .replace(/'/g, "&#39;");
 }
 
-// Translate UI (type + subType) into API "Type" filter (Movie, Tv, Anime, Manga)
-function uiToApiTypeForFilter(typeValue, subTypeValue) {
+// Map UI <select> values to backend enum names
+function uiTypeToEnum(typeValue) {
     const t = (typeValue || "").toLowerCase();
-    const s = (subTypeValue || "").toLowerCase();
-    if (s === "manga") return "Manga";
-    if (s === "anime") return "Anime";
-    if (t === "series") return "Tv";
     if (t === "movie") return "Movie";
-    return "";
+    if (t === "series") return "Series";
+    return undefined;
+}
+
+function uiSubTypeToEnum(subTypeValue) {
+    switch ((subTypeValue || "").toLowerCase()) {
+        case "anime":        return "Anime";
+        case "live-action":  return "LiveAction";
+        case "animated":     return "Animated";
+        case "documentary":  return "Documentary";
+        case "manga":        return "Manga";
+        default:             return undefined;
+    }
 }
 
 // Build query params for the API from UI controls.
@@ -45,11 +53,9 @@ function buildQueryFromUI() {
     const sort = sortBy === "title" ? "title" : sortBy === "rating" ? "rating" : "updated";
     const dir = sortBy === "title" ? "asc" : "desc";
 
-    // Map UI filters to API filters
-    const apiType = uiToApiTypeForFilter(typeFilter, subTypeFilter);
-
     return {
-        type: apiType || undefined,
+        type: uiTypeToEnum(typeFilter),
+        subType: uiSubTypeToEnum(subTypeFilter),
         tag: genreFilter || undefined,
         sort, dir,
         page: 1, pageSize: 100
@@ -59,23 +65,25 @@ function buildQueryFromUI() {
 // Build HTML for one entry returned by the API (MediaEntryDto)
 function formatEntryHTML(dto) {
     const title = escapeHTML(dto.title);
-    const type = escapeHTML(dto.type);          // API enum string
-    const status = escapeHTML(dto.status);      // API enum string
+    const type = escapeHTML(dto.type);              // EntryType string string
+    const subType = escapeHTML(dto.subType ?? "");  // EntrySubType string, may be null
+    const status = escapeHTML(dto.status);          // EntryStatus string
     const rating = dto.rating ?? "N/A";
     const notes = escapeHTML(dto.notes || "");
 
-    const genresHTML = Array.isArray(dto.genres) && dto.tags.length
-        ? dto.tags.map((g) => `<span class="genre-badge">${escapeHTML(g)}</span>`).join(" ")
+    const tags = Array.isArray(dto.tags) ? dto.tags : [];
+    const tagsHTML = tags.length
+        ? tags.map((g) => `<span class="genre-badge">${escapeHTML(g)}</span>`).join(" ")
         : "N/A";
 
     return `
         <div class="entry-row">
             <div class="entry-main">
                 <strong>${title}</strong>
-                <span class="entry-meta">(${type}, ${status})</span>
+                <span class="entry-meta">(${type}${subType ? ` - ${subType}` : ""}, ${status})</span>
             </div>
             <div class="entry-sub">
-                Genres: ${genresHTML} &nbsp;-&nbsp; Rating: ${escapeHTML(rating)}
+                Genres: ${tagsHTML} &nbsp;-&nbsp; Rating: ${escapeHTML(rating)}
             </div>
             ${notes ? `<div class="entry-notes"><small>${notes}</small></div>` : ""}
             <div class="entry-actions">

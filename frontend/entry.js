@@ -1,7 +1,7 @@
 /**
- * Load a single entry by id (edit) or create a new one (add).
- *  - Maps UI type,subType/status to API enums and vice versa
- *  - Keeps your validation, stay-on-page option, and dark mode behavior
+ * Add/Edit page wired to API with enum-safe mapping.
+ *  - Maps UI selects -> Enum strings for create/update
+ *  - Maps Enum strings -> UI selects for edit load
  */
 
 import { getEntry, createEntry, updateEntry } from "./api.js";
@@ -46,49 +46,68 @@ const setSelectedGenres = (genres) => {
     });
 }
 
-// ----- Status/Type mapping -----
-// Map UI status select -> API status string
-function uiStatusToApi(v) {
+// ----- Enum mapping helpers-----
+// EntryStatus: UI -> enum
+function uiStatusToEnum(v) {
     switch ((v || "").toLowerCase()) {
         case "watching":        return "Watching";
         case "completed":       return "Completed";
-        case "on-hold" :        return "On-Hold";
+        case "on-hold" :        return "OnHold";
         case "dropped":         return "Dropped";
         case "plan-to-watch":   return "Planning";
         default:                return "Planning";
     }
 }
 
-// Map API status -> UI status select value
-function apiStatusToUi(s) {
+// EntryStatus: enum -> UI
+function enumStatusToUI(s) {
     switch ((s || "").toLowerCase()) {
         case "watching":        return "watching";
         case "completed":       return "completed";
-        case "on-hold" :        return "on-Hold";
+        case "onhold" :        return "on-Hold";
         case "dropped":         return "dropped";
         case "planning":        return "plan-to-watch";
         default:                return "plan-to-watch";
     }
 }
 
-// Map UI type/subType -> API Type enum string
-function uiToApiType(typeValue, subTypeValue) {
-    const t = (typeValue || "").toLowerCase();
-    const s = (subTypeValue || "").toLowerCase();
-    if (s === "manga") return "Manga";
-    if (s === "anime") return "Anime";
-    if (t === "series") return "Tv";
+// EntryType: UI -> Enum
+function uiTypeToEnum(v) {
+    const t = (v || "").toLowerCase();
+    if (t === "movie") return "Movie";
+    if (t === "series") return "Series";
     return "Movie";
 }
 
-// Map API Type -> UI type/subType
-function apiTypeToUi(apiType) {
-    switch ((apiType || "").toLowerCase()) {
-        case "manga": return { type: "series", subType: "manga" };
-        case "anime": return { type: "series", subType: "anime" };
-        case "tv": return { type: "series", subType: "live-action" };
-        case "movie":
-        default: return { type: "movie", subType: "live-action" };
+// EntryType: Enum -> UI
+function enumTypeToUI(v) {
+    const t = (v || "").toLowerCase();
+    if (t === "movie") return "Movie";
+    if (t === "series") return "Series";
+    return "movie";
+}
+
+// EntrySubType: UI -> Enum
+function uiSubTypeToEnum(v) {
+    switch ((v || "").toLowerCase()) {
+        case "anime":               return "Anime";
+        case "live-action":         return "LiveAction";
+        case "animated" :           return "Animated";
+        case "documentary":         return "Documentary";
+        case "manga":               return "Manga";
+        default:                    return "LiveAction";
+    }
+}
+
+// EntrySubType: Enum -> UI
+function enumSubTypeToUI(v) {
+    switch ((v || "").toLowerCase()) {
+        case "anime":               return "anime";
+        case "liveaction":          return "liveAction";
+        case "animated" :           return "animated";
+        case "documentary":         return "documentary";
+        case "manga":               return "manga";
+        default:                    return "live-action";
     }
 }
 
@@ -143,12 +162,11 @@ if (isEditMode) {
             const entry = await getEntry(editId);
             if (!entry) showNotFoundAndStop();
 
-            // Populate fields
+            // Populate fields from DTO
             title && (title.value = entry.title || "");
-            const tMap = apiTypeToUi(entry.type);
-            type && (type.value = tMap.type);
-            subType && (subType.value = tMap.subType);
-            status && (status.value = apiStatusToUi(entry.status));
+            type && (type.value = enumTypeToUI(entry.type));
+            subType && (subType.value = enumSubTypeToUI(entry.subType));
+            status && (status.value = enumStatusToUI(entry.status));
             rating && (rating.value = entry.rating ?? "");
             notes && (notes.value = entry.notes || "");
             setSelectedGenres(entry.tags);
@@ -164,13 +182,10 @@ if (isEditMode) {
 
         const payload = {
             title: title?.value?.trim() || "",
-            type: uiToApiType(type?.value, subType?.value),
-            status: uiStatusToApi(status?.value),
+            type: uiTypeToEnum(type?.value),
+            subType: uiSubTypeToEnum(subType?.value),
+            status: uiStatusToEnum(status?.value),
             rating: rating?.value ? Number(rating.value) : null,
-            progress: null,
-            total: null,
-            startedAt: null,
-            finishedAt: null,
             notes: notes?.value?.trim() || "",
             tags: collectSelectedGenres()
         };
@@ -194,13 +209,10 @@ if (isEditMode) {
 
         const payload = {
             title: title?.value?.trim() || "",
-            type: uiToApiType(type?.value, subType?.value),
-            status: uiStatusToApi(status?.value),
+            type: uiTypeToEnum(type?.value),
+            subType: uiSubTypeToEnum(subType?.value),
+            status: uiStatusToEnum(status?.value),
             rating: rating?.value ? Number(rating.value) : null,
-            progress: null,
-            total: null,
-            startedAt: null,
-            finishedAt: null,
             notes: notes?.value?.trim() || "",
             tags: collectSelectedGenres()
         };
