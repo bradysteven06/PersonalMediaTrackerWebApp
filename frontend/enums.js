@@ -58,10 +58,18 @@ export function uiSubTypeToEnum(v) {
 export function enumSubTypeToUI(v) {
     switch ((v || "").toLowerCase()) {
         case "anime":               return "anime";
-        case "liveaction":          return "liveaction";
+        case "liveaction":          return "live-action";
         case "animated" :           return "animated";
         case "documentary":         return "documentary";
         case "manga":               return "manga";
         default:                    return "live-action";
     }
+}
+
+ // Convert a PascalCase enum string into a human label:
+ // "LiveAction" -> "Live Action", "OnHold" -> "On Hold".
+export function enumStringToLabel(v) {
+  return String(v ?? "")
+    .replace(/([a-z])([A-Z])/g, "$1 $2") // split camel/pascal case
+    .trim();
 }

@@ -1,6 +1,7 @@
 import {
   uiTypeToEnum, uiSubTypeToEnum, uiStatusToEnum,
-  enumTypeToUI, enumSubTypeToUI, enumStatusToUI
+  enumTypeToUI, enumSubTypeToUI, enumStatusToUI,
+  enumStringToLabel
 } from "./enums.js";
 import { listEntries, deleteEntry } from "./api.js"
 
@@ -50,9 +51,11 @@ function buildQueryFromUI() {
 // Build HTML for one entry returned by the API (MediaEntryDto)
 function formatEntryHTML(dto) {
     const title = escapeHTML(dto.title);
-    const type = escapeHTML(dto.type);              // EntryType string string
-    const subType = escapeHTML(dto.subType ?? "");  // EntrySubType string, may be null
-    const status = escapeHTML(dto.status);          // EntryStatus string
+
+    const type = escapeHTML(enumStringToLabel(dto.type));              // EntryType string string
+    const subType = escapeHTML(enumStringToLabel(dto.subType ?? ""));  // EntrySubType string, may be null
+    const status = escapeHTML(enumStringToLabel(dto.status));          // EntryStatus string
+
     const rating = dto.rating ?? "N/A";
     const notes = escapeHTML(dto.notes || "");
 
