@@ -35,6 +35,7 @@ namespace WebApi.Controllers
         public async Task<IActionResult> List(
             [FromQuery] string? q,
             [FromQuery] string? type,
+            [FromQuery] string? subType,
             [FromQuery] string? status,
             [FromQuery] string? tag,
             [FromQuery] string sort = "updated",
@@ -72,10 +73,23 @@ namespace WebApi.Controllers
                     return BadRequest(new ProblemDetails
                     {
                         Title = "invalid 'type' filter',",
-                        Detail = $"'{type}' is not async valid EntryType."
+                        Detail = $"'{type}' is not a valid EntryType."
                     });
                 }
                 query = query.Where(e => e.Type == parsedType);
+            }
+
+            if (!string.IsNullOrWhiteSpace(subType))
+            {
+                if (!Enum.TryParse<Domain.Enums.EntrySubType>(subType.Trim(), true, out var parsedSubType))
+                {
+                    return BadRequest(new ProblemDetails
+                    {
+                        Title = "invalid 'subType' filter',",
+                        Detail = $"'{subType}' is not a valid EntrySubType."
+                    });
+                }
+                query = query.Where(e => e.SubType == parsedSubType);
             }
 
             if (!string.IsNullOrWhiteSpace(status))
@@ -85,7 +99,7 @@ namespace WebApi.Controllers
                     return BadRequest(new ProblemDetails
                     {
                         Title = "invalid 'status' filter',",
-                        Detail = $"'{status}' is not async valid EntryType."
+                        Detail = $"'{status}' is not a valid EntryStatus."
                     });
                 }
                 query = query.Where(e => e.Status == parsedStatus);
