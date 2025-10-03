@@ -4,6 +4,10 @@
  *  - Maps Enum strings -> UI selects for edit load
  */
 
+import {
+  uiTypeToEnum, uiSubTypeToEnum, uiStatusToEnum,
+  enumTypeToUI, enumSubTypeToUI, enumStatusToUI
+} from "./enums.js";
 import { getEntry, createEntry, updateEntry } from "./api.js";
 
 // ----- DOM references -----
@@ -44,71 +48,6 @@ const setSelectedGenres = (genres) => {
     genresContainer.querySelectorAll('input[type="checkbox"]').forEach((cb) => {
         cb.checked = set.has(cb.value);
     });
-}
-
-// ----- Enum mapping helpers-----
-// EntryStatus: UI -> enum
-function uiStatusToEnum(v) {
-    switch ((v || "").toLowerCase()) {
-        case "watching":        return "Watching";
-        case "completed":       return "Completed";
-        case "on-hold" :        return "OnHold";
-        case "dropped":         return "Dropped";
-        case "plan-to-watch":   return "Planning";
-        default:                return "Planning";
-    }
-}
-
-// EntryStatus: enum -> UI
-function enumStatusToUI(s) {
-    switch ((s || "").toLowerCase()) {
-        case "watching":        return "watching";
-        case "completed":       return "completed";
-        case "onhold" :        return "on-Hold";
-        case "dropped":         return "dropped";
-        case "planning":        return "plan-to-watch";
-        default:                return "plan-to-watch";
-    }
-}
-
-// EntryType: UI -> Enum
-function uiTypeToEnum(v) {
-    const t = (v || "").toLowerCase();
-    if (t === "movie") return "Movie";
-    if (t === "series") return "Series";
-    return "Movie";
-}
-
-// EntryType: Enum -> UI
-function enumTypeToUI(v) {
-    const t = (v || "").toLowerCase();
-    if (t === "movie") return "Movie";
-    if (t === "series") return "Series";
-    return "movie";
-}
-
-// EntrySubType: UI -> Enum
-function uiSubTypeToEnum(v) {
-    switch ((v || "").toLowerCase()) {
-        case "anime":               return "Anime";
-        case "live-action":         return "LiveAction";
-        case "animated" :           return "Animated";
-        case "documentary":         return "Documentary";
-        case "manga":               return "Manga";
-        default:                    return "LiveAction";
-    }
-}
-
-// EntrySubType: Enum -> UI
-function enumSubTypeToUI(v) {
-    switch ((v || "").toLowerCase()) {
-        case "anime":               return "anime";
-        case "liveaction":          return "liveAction";
-        case "animated" :           return "animated";
-        case "documentary":         return "documentary";
-        case "manga":               return "manga";
-        default:                    return "live-action";
-    }
 }
 
 // ----- UX helpers -----

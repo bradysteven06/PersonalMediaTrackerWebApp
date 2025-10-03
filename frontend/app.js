@@ -1,3 +1,7 @@
+import {
+  uiTypeToEnum, uiSubTypeToEnum, uiStatusToEnum,
+  enumTypeToUI, enumSubTypeToUI, enumStatusToUI
+} from "./enums.js";
 import { listEntries, deleteEntry } from "./api.js"
 
 // ----- DOM references -----
@@ -21,25 +25,6 @@ function escapeHTML(s) {
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#39;");
-}
-
-// Map UI <select> values to backend enum names
-function uiTypeToEnum(typeValue) {
-    const t = (typeValue || "").toLowerCase();
-    if (t === "movie") return "Movie";
-    if (t === "series") return "Series";
-    return undefined;
-}
-
-function uiSubTypeToEnum(subTypeValue) {
-    switch ((subTypeValue || "").toLowerCase()) {
-        case "anime":        return "Anime";
-        case "live-action":  return "LiveAction";
-        case "animated":     return "Animated";
-        case "documentary":  return "Documentary";
-        case "manga":        return "Manga";
-        default:             return undefined;
-    }
 }
 
 // Build query params for the API from UI controls.
