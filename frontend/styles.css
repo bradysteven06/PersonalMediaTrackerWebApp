@@ -70,9 +70,44 @@ header {
     padding: var(--space-3);
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: var(--space-2);
 }
+
+header .theme-toggle {
+    margin-left: auto;
+    position: relative;
+    z-index: 1;
+}
+
+header h1 {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0;
+    text-align: center;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+@media (max-width: 660px) {
+    header {
+        flex-direction: column;         /* vertical stack */
+        align-items: center;            /* center both */
+        gap: var(--space-2);
+        padding-block: var(--space-2);
+    }
+    header h1 {
+        position: static;               /* release absolute centering */
+        transform: none;
+        pointer-events: auto;           /* restore normal behavior */
+        white-space: normal;            /* allow wrap if needed */
+        margin: 0;
+    }
+    header .theme-toggle {
+        margin-left: 0;                 /* no push-right on small screens */
+    }
+}
+
+
 
 .entry-button {
     display: inline-block;

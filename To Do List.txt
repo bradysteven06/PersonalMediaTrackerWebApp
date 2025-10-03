@@ -1,29 +1,23 @@
-Filtering UI (e.g., filter by type, subType, or genre) - done
 
-Sorting entries (e.g., by title, rating, or status) - done
+add input for rating
 
-Delete confirmation - done
+add input for notes
 
-Separate page for add and edit - maybe separate both - done
-
-Tag badges for genres instead of plain text - done
-
-Dark mode toggle - done
-
-Improved responsive design
-
-Begin backend setup (replace localStorage with C#/SQL API)
-
+add identity to backend for user profiles
 
 
 Future Ideas:
 
-group all the filtering and sorting controls inside a form or div for styling and layout consistency
+a count of entries in the media list
+
+add more types
+
+add more sub types
+
+add more genre tags
 
 replace confirm() with a custom modal for delete confirmation
 
 show a toast message after deletion
 
 allow undo of delete entry (via temp buffer)
-
-toggle tags for the checkboxes in the form
