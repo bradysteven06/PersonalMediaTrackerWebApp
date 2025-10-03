@@ -55,9 +55,11 @@
                 </select>
 
                 <!-- Visible only in Add mode -->
-                <label id="stayCheckboxContainer">
-                    <input type="checkbox" id="stayOnPage" /> Stay on this page after adding
-                </label>
+                <div id="stayCheckboxContainer">
+                    <label class="stayOnPageToggle">
+                        <input type="checkbox" id="stayOnPage" /> Stay on this page after adding
+                    </label>
+                </div>
                 <button type="submit" id="submitBtn">Add Entry</button>
                 <button type="button" id="cancelBtn">Cancel</button>
             </form>
