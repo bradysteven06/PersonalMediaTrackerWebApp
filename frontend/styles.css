@@ -88,7 +88,7 @@ header {
 form {
     background: var(--bg-card);
     padding: var(--space-3);
-    margin-bottom: var(--space-5);
+    margin: 0 auto var(--space-5);
     border-radius: var(--radius);
     border: 1px solid var(--border);
     max-width: 760px;       /* keeps for narrow */
