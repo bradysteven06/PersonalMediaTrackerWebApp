@@ -18,13 +18,19 @@
         <main class="container">
             <!-- Shared form for both Add and Edit -->
             <form id="mediaForm">
+                <!-- Title (required) -->
+                <label for="title">Title</label>
                 <input type="text" id="title" placeholder="Title" required />
 
+                <!-- Type -->
+                <label for="type">Type</label>
                 <select id="type">
                     <option value="movie">Movie</option>
                     <option value="series">Series</option>
                 </select>
 
+                <!-- SubType -->
+                 <label for="subType">SubType</label>
                 <select id="subType">
                     <option value="anime">Anime</option>
                     <option value="live-action">Live Action</option>
@@ -33,6 +39,7 @@
                     <option value="manga">Manga</option>
                 </select>
 
+                <!-- Genres (pill-checkbox UI styled in css) -->
                 <fieldset id="genreCheckboxes" class="tag-pills">
                     <legend>Genres</legend>
                     <label><input type="checkbox" value="action">Action</label>
@@ -46,6 +53,8 @@
                     <label><input type="checkbox" value="mystery">Mystery</label>
                 </fieldset>
 
+                <!-- Status -->
+                <label for="status">Status</label>
                 <select id="status">
                     <option value="watching">Watching / Reading</option>
                     <option value="completed">Completed</option>
@@ -53,6 +62,28 @@
                     <option value="dropped">Dropped</option>
                     <option value="plan-to-watch">Plan to Watch / Read</option>
                 </select>
+
+                <!-- Rating
+                    - Uses <input type="number"
+                    - step=0.5 allows halves -->
+                <label for="rating">Rating (0-10) - Leave blank if you don't want to rate it yet.</label>
+                <input
+                    type="number"
+                    id="rating"
+                    placeholder="e.g., 8.5"
+                    min="0"
+                    max="10"
+                    step="0.5"
+                    inputmode="decimal"
+                />
+
+                <!-- Notes -->
+                <lavel for="notes">Notes</lavel>
+                <textarea
+                    id="notes"
+                    placeholder="Thoughts...."
+                    rows="5"
+                ></textarea>
 
                 <!-- Visible only in Add mode -->
                 <div id="stayCheckboxContainer">

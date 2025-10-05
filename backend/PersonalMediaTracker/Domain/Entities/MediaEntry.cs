@@ -10,7 +10,7 @@ namespace Domain.Entities
         public EntryType Type { get; set; }             // movie / series
         public EntrySubType? SubType { get; set; }       // live-action / anime / manga ....
         public EntryStatus Status { get; set; }         // planning/watching/etc.
-        public int? Rating { get; set; }               // 0-10, nullable
+        public decimal? Rating { get; set; }               // 0-10, nullable
 
         public string? Notes { get; set; }
 

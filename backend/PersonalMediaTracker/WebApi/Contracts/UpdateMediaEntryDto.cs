@@ -17,8 +17,8 @@ namespace WebApi.Contracts
 
         public EntryStatus? Status { get; set; }
 
-        [Range(0, 10)]
-        public int? Rating { get; set; }
+        [Range(0, 10, ErrorMessage = "Rating must be between 0 and 10")]
+        public decimal? Rating { get; set; }
 
         [StringLength(2000)]
         public string? Notes { get; set; }

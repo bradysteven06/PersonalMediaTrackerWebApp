@@ -45,6 +45,10 @@ namespace Infrastructure.Persistence
                 .HasMaxLength(16)
                 .IsRequired();
 
+            // Rating supports 0.0-10.0 with one decimal
+            entry.Property(e => e.Rating)
+                .HasPrecision(4, 1);
+
             // Helpful indexes for common filters
             entry.HasIndex(e => new { e.UserId, e.Type });
             entry.HasIndex(e => new { e.UserId, e.Status });

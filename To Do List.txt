@@ -1,7 +1,7 @@
 
-add input for rating
+add display for notes
 
-add input for notes
+fix validation error for Rating 0.5 steps
 
 add identity to backend for user profiles
 

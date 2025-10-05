@@ -11,7 +11,7 @@ namespace WebApi.Contracts
         public EntryType Type { get; set; }       
         public EntrySubType? SubType {  get; set; }
         public EntryStatus Status { get; set; }   
-        public int? Rating { get; set; }
+        public decimal? Rating { get; set; }
         public string? Notes { get; set; }
         public IEnumerable<string> Tags { get; set; } = Array.Empty<string>();
         public DateTime CreatedAtUtc { get; set; }
