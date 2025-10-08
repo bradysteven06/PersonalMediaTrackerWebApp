@@ -1,18 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Domain.Entities;
+using Domain.Entities.Identity;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence
 {
-    // EF Core DbContext for Personal Media Tracker.
-    // - Centralizes entity-to-table mappings
-    // - Enforces soft-delete via global query filters
-    // - Applies audit timestamps (CreatedAtUtc/UpdatedAtUtc/DeletedAtUtc)
-    public sealed class AppDbContext : DbContext
+    // EF Core DbContext for Personal Media Tracker + ASP.NET Core Identity.
+    // - Hosts domain entities and Identity tables
+    // - Keeps audit + soft delete rules centralized
+    public sealed class AppDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
@@ -89,15 +89,12 @@ namespace Infrastructure.Persistence
             // Match the principals' global filters so the join never "sees" filtered principals
             entryTag.HasQueryFilter(et => !et.MediaEntry.IsDeleted && !et.Tag.IsDeleted);
 
-
+            // Concurrency tokens
             modelBuilder.Entity<MediaEntry>().Property(e => e.RowVersion).IsRowVersion();
             modelBuilder.Entity<Tag>().Property(e => e.RowVersion).IsRowVersion();
         }
 
         // Audit + Soft-delete handling.
-        // - New entities: set CreatedAt/UpdatedAt
-        // - Modified: set UpdatedAt
-        // - Deleted: convert to soft delete (flip flag + set DeletedAt)
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             ApplyAuditRules();
