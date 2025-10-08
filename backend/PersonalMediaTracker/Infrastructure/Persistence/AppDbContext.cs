@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Domain.Entities;
-using Domain.Entities.Identity;
+using Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

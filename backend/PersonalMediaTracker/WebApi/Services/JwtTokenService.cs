@@ -1,14 +1,15 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Domain.Entities.Identity;
+using System.Linq;
+using Infrastructure.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
 namespace WebApi.Services
 {
     // Creates short lived access tokens for authenticated users.
-    public interface JwtTokenService
+    public interface IJwtTokenService
     {
         string CreateAccessToken(ApplicationUser user, IEnumerable<string> roles);
     }
@@ -22,7 +23,7 @@ namespace WebApi.Services
         {
             var jwtSection = _cfg.GetSection("Jwt");
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSection["Key"]!));
-            var creds = new SigningCredentialsCredentials(key, SecurityAlgorithms.HmacSha256);
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             // Standard claims + helpful identifiers
             var claims = new List<Claim>

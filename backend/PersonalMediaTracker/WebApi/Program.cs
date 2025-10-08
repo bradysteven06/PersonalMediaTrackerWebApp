@@ -1,13 +1,12 @@
 using System.Text;
 using System.Text.Json.Serialization;
-using Domain.Entities.Identity;
+using Infrastructure.Identity;
 using Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using WebApi.Services;
-using WebApi.Services.Identity;
 
 // Create builder
 var builder = WebApplication.CreateBuilder(args);
