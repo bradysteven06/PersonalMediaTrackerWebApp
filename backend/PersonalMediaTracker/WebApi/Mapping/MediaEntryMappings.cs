@@ -1,4 +1,6 @@
-﻿using Domain.Entities;
+﻿using System;
+using System.Linq;
+using Domain.Entities;
 using WebApi.Contracts;
 
 namespace WebApi.Mapping
@@ -12,6 +14,7 @@ namespace WebApi.Mapping
 
         public static (MediaEntry entity, string? error) ToEntity(this CreateMediaEntryDto dto, Guid userId)
         {
+            // Basic validation in mapper keeps controller thin
             if (string.IsNullOrWhiteSpace(dto.Title))
             {
                 return (null!, "Title is required.");
@@ -68,7 +71,8 @@ namespace WebApi.Mapping
                 Status = entity.Status,
                 Rating = entity.Rating,                
                 Notes = entity.Notes,
-                Tags = (entity.EntryTags.Select(t => t.Tag!.Name))
+                // Materialize to array to avoid deferred execution on disposed DbContext
+                Tags = entity.EntryTags.Select(t => t.Tag!.Name).ToArray()
             };
         }
 

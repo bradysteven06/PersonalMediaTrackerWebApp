@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using Infrastructure.Persistence;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,7 @@ namespace WebApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public sealed class MediaEntriesController : ControllerBase
     {
         private readonly AppDbContext _db;
@@ -48,7 +50,7 @@ namespace WebApi.Controllers
             page = page <= 0 ? 1 : page;
             pageSize = pageSize is <= 0 or > 100 ? 20 : pageSize;
 
-            var userId = GetUserId(); // --TODO-- replace with real user id from auth
+            var userId = GetUserId(); // user id from JWT
 
             // Base query, tenant-scoped, include tags for mapping
             IQueryable<Domain.Entities.MediaEntry> query = _db.MediaEntries
@@ -125,8 +127,6 @@ namespace WebApi.Controllers
 
                 case "rating":
                     // Push null ratings to the end consistently, then sort by rating
-                    // DESC: non-null first (false), then by rating desc
-                    // ASC:  nulls last (true), then by rating asc
                     query = asc
                         ? query.OrderBy(e => e.Rating == null).ThenBy(e => e.Rating)
                         : query.OrderBy(e => e.Rating == null).ThenByDescending(e => e.Rating);
@@ -284,12 +284,13 @@ namespace WebApi.Controllers
 
         // ----- helpers -----
 
-        // Replace with real authenticated user id --TODO--
         private Guid GetUserId()
         {
-            // Example: var sub = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            // return Guid.Parse(sub);
-            return Guid.Empty; // DEV placeholder (ensure seed/test data uses Guid.Empty)
+            // Reads the NameIdentifier claim (issued this in JwtTokenService)
+            var sub = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrWhiteSpace(sub))
+                throw new UnauthorizedAccessException("Missing NameIdentifier claim.");
+            return Guid.Parse(sub);
         }
     }
 
