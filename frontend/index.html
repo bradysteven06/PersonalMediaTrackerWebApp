@@ -100,13 +100,14 @@
                 } catch {
                     // If not logged in, bounce to login with return param to come back here
                     const here = location.href;
-                    location.href = `login.html?return=${encodeURIComponent(here || "index.html")}`;
+                    location.href = `login.html?return=${encodeURIComponent(here)}`;
                 }
             }
 
             logoutBtn.addEventListener("click", () => {
+                const here = location.href;
                 logout();
-                location.href = "login.html";
+                location.href = `login.html?return=${encodeURIComponent(here)}`;
             });
 
             initAccount();

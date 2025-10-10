@@ -56,21 +56,31 @@
 
             function afterAuth() {
                 const params = new URLSearchParams(location.search);
-                const ret = params.get("return") || "index.html";
+                const ret = params.get("return"); // may be full URL or relative
 
-                // Only allow same-origin navigations
-                let target = "index.html";
+                // Build a same-folder fallback (e.g., /subdir/index.html rather than /index.html)
+                const fallbackUrl = new URL("index.html", location.href);
+
+                // Default to the fallback first
+                let targetUrl = fallbackUrl;
+
                 try {
-                    const u = new URL(ret, location.origin);
-                    const sameOrigin = u.origin === location.origin;
-                    const pointsToLogin = /\/login\.html$/i.test(u.pathname);
+                    // IMPORTANT: resolve against location.href, not location.origin
+                    const candidate = new URL(ret || "index.html", location.href);
+
+                    const sameOrigin = candidate.origin === location.origin;
+                    const pointsToLogin = /\/login\.html$/i.test(candidate.pathname);
+
+                    // Only allow same-origin and not back to login
                     if (sameOrigin && !pointsToLogin) {
-                        target = u.href;
-                }
+                    targetUrl = candidate;
+                    }
                 } catch {
-                // Fall back to index
+                    // If parsing fails, we keep the same-folder fallback
                 }
-                location.href = target;
+
+                // Navigate
+                location.href = targetUrl.toString();
             }
 
             function setBusy(b) {
