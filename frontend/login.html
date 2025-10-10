@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title> Sign in • Personal Media Tracker</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link href="styles.css" rel="stylesheet" />
+        <style>
+            .auth-wrap {
+                max-width: 420px;
+                margin: 8vh auto;
+                padding: 1.25rem 1.5rem;
+                border-radius: 12px;
+                box-shadow: 0 6px 20px rgba(0,0,0,.1);
+                background: var(--card-bg, #fff)
+            }
+            .auth-actions { display:flex; gap:.75rem; flex-wrap:wrap }
+            .auth-actions button { flex:1 }
+            .muted { opacity:.8; font-size:.9rem; margin-top:.75rem }
+            label { display:block; margin:.5rem 0 .25rem }
+            input[type="email"], input[type="password"]{
+                width:100%; padding:.6rem .7rem; border-radius:8px; border:1px solid #ccc
+            }
+        </style>
+    </head>
+    <body>
+        <div class="auth-wrap">
+            <h1>Welcome back</h1>
+            <p class="muted">Sign in or create an account to manage your media entries.</p>
+            <form id="authForm">
+                <label for="email">Email</label>
+                <input id="email" type="email" autocomplete="username" required />
+                <label for="password">Password</label>
+                <input id="password" type="password" autocomplete="current-password" required />
+                <div class="auth-actions" style="margin-top:1rem">
+                    <button id="loginBtn" type="submit">Sign in</button>
+                    <button id="registerBtn" type="button">Create account</button>
+                </div>
+            </form>
+            <p id="msg" class="muted"></p>
+        </div>
+
+        <script>
+            // Configure once here for local dev, already use pattern elsewhere.
+            window.APP_CONFIG = { apiBaseUrl: "https://localhost:7106" };
+        </script>
+
+        <script type="module">
+            import { login, register } from "./auth.js";
+
+            const email = document.getElementById("email");
+            const password = document.getElementById("password");
+            const form = document.getElementById("authForm");
+            const registerBtn = document.getElementById("registerBtn");
+            const msg = document.getElementById("msg");
+
+            function afterAuth() {
+                const params = new URLSearchParams(location.search);
+                const ret = params.get("return") || "index.html";
+
+                // Only allow same-origin navigations
+                let target = "index.html";
+                try {
+                    const u = new URL(ret, location.origin);
+                    const sameOrigin = u.origin === location.origin;
+                    const pointsToLogin = /\/login\.html$/i.test(u.pathname);
+                    if (sameOrigin && !pointsToLogin) {
+                        target = u.href;
+                }
+                } catch {
+                // Fall back to index
+                }
+                location.href = target;
+            }
+
+            function setBusy(b) {
+                form.querySelectorAll("input,button").forEach(el => el.disabled = b);
+            }
+
+            form.addEventListener("submit", async (e) => {
+                e.preventDefault();
+                msg.textContent = "";
+                setBusy(true);
+                try {
+                    await login(email.value.trim(), password.value);
+                    afterAuth();
+                } catch (err) {
+                    msg.textContent = "Sign in failed: " + (err?.message || err);
+                } finally { setBusy(false); }
+            });
+
+            registerBtn.addEventListener("click", async () => {
+                msg.textContent = "";
+                setBusy(true);
+                try {
+                    await register(email.value.trim(), password.value);
+                    afterAuth();
+                } catch (err) {
+                    msg.textContent = "Registration failed: " + (err?.message || err);
+                } finally { setBusy(false); }
+            });
+        </script>
+    </body>
+</html>

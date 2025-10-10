@@ -62,7 +62,7 @@ export function enumSubTypeToUI(v) {
         case "animated" :           return "animated";
         case "documentary":         return "documentary";
         case "manga":               return "manga";
-        default:                    return "live-action";
+        default:                    return "anime";
     }
 }
 

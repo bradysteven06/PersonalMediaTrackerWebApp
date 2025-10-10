@@ -16,6 +16,12 @@
         </header>
 
         <main class="container">
+            <!-- Current user and Logout button -->
+            <div id="accountWidget" style="float:right; gap:.5rem; align-items:center;">
+                <span id="acctEmail" style="opacity:.8"></span>
+                </br>
+                <button id="logoutBtn" type="button">Logout</button>
+            </div>
             <!-- New Entry button to navigate to entry form -->
             <div id="new-entry">
             <a href="entry.html" class="entry-button">+ New Entry</a>
@@ -71,7 +77,7 @@
             <!-- Section where the media list is rendered -->
             <section id="media-list">
             <h2>My Media List</h2>
-            <ul id="entriesContainer"></ul>
+            <div id="entriesContainer" aria-live="polite"></div>
             </section>
         </main>
 
@@ -80,6 +86,32 @@
             // Change the port to match Asp.Net app if needed
             window.APP_CONFIG = { apiBaseUrl: "https://localhost:7106" };
         </script>
+
+        <script type="module">
+            import {fetchMe, logout } from "./auth.js";
+
+            const acctEmail = document.getElementById("acctEmail");
+            const logoutBtn = document.getElementById("logoutBtn");
+
+            async function initAccount() {
+                try {
+                    const me = await fetchMe();
+                    acctEmail.textContent = me.email || me.userName || "(unknown)";
+                } catch {
+                    // If not logged in, bounce to login with return param to come back here
+                    const here = location.href;
+                    location.href = `login.html?return=${encodeURIComponent(here || "index.html")}`;
+                }
+            }
+
+            logoutBtn.addEventListener("click", () => {
+                logout();
+                location.href = "login.html";
+            });
+
+            initAccount();
+        </script>
+
         <!-- Link to the JavaScript file -->
         <script type="module" src="app.js"></script>
     </body>

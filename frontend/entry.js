@@ -8,22 +8,26 @@ import {
   uiTypeToEnum, uiSubTypeToEnum, uiStatusToEnum,
   enumTypeToUI, enumSubTypeToUI, enumStatusToUI
 } from "./enums.js";
-import { getEntry, createEntry, updateEntry } from "./api.js";
+import { api } from "./api.js";
+
+// ----- Constants -----
+// Centralize the base path so you never forget it in API calls.
+const BASE = "/api/mediaentries";
 
 // ----- DOM references -----
 const form = document.getElementById("mediaForm");
-const title = document.getElementById("title");
-const type = document.getElementById("type");
-const subType = document.getElementById("subType");
-const status = document.getElementById("status");
-const rating = document.getElementById("rating");
-const notes = document.getElementById("notes");
+const titleInput = document.getElementById("title");
+const typeSelect = document.getElementById("type");
+const subTypeSelect = document.getElementById("subType");
+const statusSelect = document.getElementById("status");
+const ratingInput = document.getElementById("rating");
+const notesInput = document.getElementById("notes");
 const submitBtn = document.getElementById("submitBtn");
 const cancelBtn = document.getElementById("cancelBtn");
-const stayOnPageCheckbox = document.getElementById("stayOnPage");
+const stayOnPageToggle = document.getElementById("stayOnPageToggle");
 const stayCheckboxContainer = document.getElementById("stayCheckboxContainer");
 const formTitleEl = document.getElementById("formTitle");
-const genresContainer = document.getElementById("genreCheckboxes"); // parent div for genre checkboxes
+const genresContainer = document.getElementById("genreContainer"); // parent div for genre checkboxes
 const darkToggle = document.getElementById("darkModeToggle");
 
 // ----- URL params (id-based) -----
@@ -31,6 +35,18 @@ const urlParams = new URLSearchParams(window.location.search);
 const mode = (urlParams.get("mode") || "add").toLowerCase(); // "add" or "edit"
 const editId = urlParams.get("id"); // used only when mode === "edit"
 const isEditMode = mode === "edit";
+
+// Converts "", null, undefined -> null. Any number is rounded to nearest 0.5.
+function parseOptionalRating(v) {
+    if (v === null || v === undefined) return null;
+    const s = String(v).trim();
+    if (!s) return null;
+    const n = Number(s);
+    if (Number.isNaN(n)) return null;
+    // normalize to 0.5 increments
+    const halfSteps = Math.round(n * 2);
+    return halfSteps / 2;
+}
 
 // ----- Genre helpers -----
 // Read all checked genres from the UI into an array of strings
@@ -68,10 +84,10 @@ const showNotFoundAndStop = (msg = "Could not find that entry to edit.") => {
 
 // Simple required title validation
 const validate = () => {
-    const t = title?.value?.trim();
+    const t = titleInput?.value?.trim();
     if (!t) {
         alert("Please enter a title.");
-        title?.focus();
+        titleInput?.focus();
         return false;
     }
     return true;
@@ -86,90 +102,97 @@ if (cancelBtn) {
     });
 }
 
-// ----- EDIT MODE -----
-if (isEditMode) {
-    formTitleEl && (formTitleEl.textContent = "Edit Entry");
-    submitBtn && (submitBtn.textContent = "Save Changes");
-    if (stayCheckboxContainer) stayCheckboxContainer.style.display = "none";
-
-    // Require an id in the URL
-    if (!editId) showNotFoundAndStop("Missing entry id.");
-
-    // Load from API and populate form
-    (async () => {
-        try {
-            const entry = await getEntry(editId);
-            if (!entry) showNotFoundAndStop();
-
-            // Populate fields from DTO
-            title && (title.value = entry.title || "");
-            type && (type.value = enumTypeToUI(entry.type));
-            subType && (subType.value = enumSubTypeToUI(entry.subType));
-            status && (status.value = enumStatusToUI(entry.status));
-            rating && (rating.value = entry.rating ?? "");
-            notes && (notes.value = entry.notes || "");
-            setSelectedGenres(entry.tags);
-        } catch {
-            showNotFoundAndStop("Failed to load entry.");
-        }
-    })();
-
-    // Submit handler - update by id
-    form?.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        if (!validate()) return;
-
-        const payload = {
-            title: title?.value?.trim() || "",
-            type: uiTypeToEnum(type?.value),
-            subType: uiSubTypeToEnum(subType?.value),
-            status: uiStatusToEnum(status?.value),
-            rating: rating?.value ? Number(rating.value) : null,
-            notes: notes?.value?.trim() || "",
-            tags: collectSelectedGenres()
-        };
-
-        try {
-            await updateEntry(editId, payload);
-            window.location.href = "index.html";
-        } catch (err) {
-            alert(`Save failed: ${err.message || String(err)}`);
-        }
-    });
-} else {
-    //----- ADD MODE -----
-    formTitleEl && (formTitleEl.textContent = "Add Entry");
-    submitBtn && (submitBtn.textContent = "Add Entry");
-    if (stayCheckboxContainer) stayCheckboxContainer.style.display = "";
-
-    form?.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        if (!validate()) return;
-
-        const payload = {
-            title: title?.value?.trim() || "",
-            type: uiTypeToEnum(type?.value),
-            subType: uiSubTypeToEnum(subType?.value),
-            status: uiStatusToEnum(status?.value),
-            rating: rating?.value ? Number(rating.value) : null,
-            notes: notes?.value?.trim() || "",
-            tags: collectSelectedGenres()
-        };
-
-        try {
-            await createEntry(payload);
-            if (stayOnPageCheckbox && stayOnPageCheckbox.checked) {
-                form.reset();
-                setSelectedGenres([]);
-                title?.focus();
-            } else {
-                window.location.href = "index.html";  
-            }            
-        } catch (err) {
-            alert(`Create failed: ${err.message || String(err)}`);
-        }
-    });
+// Build DTO from form, UI -> payload
+function buildDtoFromForm() {
+    return {
+        title: titleInput?.value?.trim() || "",
+        type: uiTypeToEnum(typeSelect?.value),
+        subType: uiSubTypeToEnum(subTypeSelect?.value) || null,
+        status: uiStatusToEnum(statusSelect?.value),
+        rating: parseOptionalRating(ratingInput?.value),
+        notes: notesInput?.value?.trim() || "",
+        tags: collectSelectedGenres()
+  };
 }
+
+// Apply DTO to form, payload -> UI mapping
+function applyDtoToForm(dto) {
+    titleInput && (titleInput.value = dto.title ?? "");
+    typeSelect && (typeSelect.value = enumTypeToUI(dto.type));
+    subTypeSelect && (subTypeSelect.value = enumSubTypeToUI(dto.subType));
+    statusSelect && (statusSelect.value = enumStatusToUI(dto.status));
+    ratingInput && (ratingInput.value = dto.rating ?? "");
+    notesInput && (notesInput.value = dto.notes ?? "");
+    setSelectedGenres(dto.tags);
+}
+
+// Mode initializer (non-submit tasks)
+// - Sets headings/butons, shows/hides "stay on page", loads DTO for edit and populates form
+async function initMode() { 
+    if (isEditMode) {
+        formTitleEl && (formTitleEl.textContent = "Edit Entry"); 
+        submitBtn && (submitBtn.textContent = "Save Changes");   
+        if (stayCheckboxContainer) stayCheckboxContainer.style.display = "none"; 
+
+        if (!editId) showNotFoundAndStop("Missing entry id.");   
+
+        try {
+        const entry = await api.get(`${BASE}/${editId}`);      
+        if (!entry) showNotFoundAndStop();
+        applyDtoToForm(entry);                                 
+        } catch {
+        showNotFoundAndStop("Failed to load entry.");
+        }
+    } else {
+        formTitleEl && (formTitleEl.textContent = "Add Entry");  
+        submitBtn && (submitBtn.textContent = "Add Entry");      
+        if (stayCheckboxContainer) stayCheckboxContainer.style.display = ""; 
+    }
+}
+
+// Submit function
+// - Prevents double submit, decides PUT vs POST by isEditMode, honors "stay on page" toggle
+async function submitEntry(e) { 
+    e?.preventDefault?.();
+    if (!validate()) return;
+
+    const prevText = submitBtn.textContent; 
+    submitBtn.disabled = true;              
+    submitBtn.textContent = isEditMode ? "Saving..." : "Adding..."; 
+
+    try {
+        const payload = buildDtoFromForm();   
+
+        if (isEditMode && editId) {
+        await api.put(`${BASE}/${editId}`, payload); 
+        window.location.href = "index.html";
+        } else {
+        await api.post(`${BASE}`, payload);         
+        if (stayOnPageToggle && stayOnPageToggle.checked) {
+            form.reset();
+            setSelectedGenres([]);
+            titleInput?.focus();
+        } else {
+            window.location.href = "index.html";
+        }
+        }
+    } catch (err) {
+        alert(`Save failed: ${err?.message || String(err)}`);
+    } finally {
+        submitBtn.disabled = false;          
+        submitBtn.textContent = prevText;    
+    }
+}
+
+// 
+initMode() 
+    .then(() => {
+        form?.addEventListener("submit", submitEntry); 
+    })
+    .catch(err => {
+        console.error(err); // errors are surfaced to the user by initMode
+    });
+
 
 // ------------------
 // Dark mode support

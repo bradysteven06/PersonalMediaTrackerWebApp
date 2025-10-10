@@ -5,6 +5,8 @@ add identity to backend for user profiles
 
 Future Ideas:
 
+clear/lock SubType when Type changes (avoid mismatched combos)
+
 a count of entries in the media list
 
 add more types

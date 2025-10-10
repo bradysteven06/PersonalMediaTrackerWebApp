@@ -16,6 +16,12 @@
         </header>
 
         <main class="container">
+            <!-- Current user and Logout button -->
+            <div id="accountWidget" style="float:right; gap:.5rem; align-items:center;">
+                <span id="acctEmail" style="opacity:.8"></span>
+                </br>
+                <button id="logoutBtn" type="button">Logout</button>
+            </div>
             <!-- Shared form for both Add and Edit -->
             <form id="mediaForm">
                 <!-- Title (required) -->
@@ -40,7 +46,7 @@
                 </select>
 
                 <!-- Genres (pill-checkbox UI styled in css) -->
-                <fieldset id="genreCheckboxes" class="tag-pills">
+                <fieldset id="genreContainer" class="tag-pills">
                     <legend>Genres</legend>
                     <label><input type="checkbox" value="action">Action</label>
                     <label><input type="checkbox" value="adventure">Adventure</label>
@@ -68,17 +74,18 @@
                     - step=0.5 allows halves -->
                 <label for="rating">Rating (0-10) - Leave blank if you don't want to rate it yet.</label>
                 <input
-                    type="number"
                     id="rating"
-                    placeholder="e.g., 8.5"
+                    name="rating"
+                    type="number"
                     min="0"
                     max="10"
                     step="0.5"
                     inputmode="decimal"
+                    placeholder="e.g., 7.5 (optional)"
                 />
 
                 <!-- Notes -->
-                <lavel for="notes">Notes</lavel>
+                <label for="notes">Notes</label>
                 <textarea
                     id="notes"
                     placeholder="Thoughts...."
@@ -88,9 +95,11 @@
                 <!-- Visible only in Add mode -->
                 <div id="stayCheckboxContainer">
                     <label class="stayOnPageToggle">
-                        <input type="checkbox" id="stayOnPage" /> Stay on this page after adding
+                        <input type="checkbox" id="stayOnPageToggle" /> Stay on this page after adding
                     </label>
                 </div>
+                <!-- Aria live region for form status/errors -->
+                <p id="formMsg" class="muted" aria-live="polite"></p>
                 <button type="submit" id="submitBtn">Add Entry</button>
                 <button type="button" id="cancelBtn">Cancel</button>
             </form>
@@ -101,6 +110,33 @@
             // Change the port to match Asp.Net app if needed
             window.APP_CONFIG = { apiBaseUrl: "https://localhost:7106"};
         </script>
+
+        <!-- Auth guard + header account widget -->
+        <script type="module">
+            import {fetchMe, logout } from "./auth.js";
+
+            const acctEmail = document.getElementById("acctEmail");
+            const logoutBtn = document.getElementById("logoutBtn");
+
+            async function initAccount() {
+                try {
+                    const me = await fetchMe();
+                    acctEmail.textContent = me.email || me.userName || "(unknown)";
+                } catch {
+                    // If not logged in, bounce to login with return param to come back here
+                    const here = location.href;
+                    location.href = `login.html?return=${encodeURIComponent(here || "index.html")}`;
+                }
+            }
+
+            logoutBtn.addEventListener("click", () => {
+                logout();
+                location.href = "login.html";
+            });
+
+            initAccount();
+        </script>
+
         <!-- Link to the JavaScript file-->
         <script type="module" src="entry.js"></script>
     </body>
