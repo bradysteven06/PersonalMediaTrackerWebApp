@@ -1,6 +1,5 @@
+Current Tasks:
 
-
-add identity to backend for user profiles
 
 
 Future Ideas:
