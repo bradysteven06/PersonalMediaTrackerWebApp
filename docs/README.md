@@ -36,14 +36,14 @@ Built with ASP.NET Core 8, Entity Framework Core, and JavaScript (ES6), this pro
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|-------------|
-| Frontend | HTML5, CSS3, JavaScript (ES6 Modules) |
-| Backend | ASP.NET Core 8 Web API |
-| Database | Entity Framework Core + SQLite |
-| Authentication | ASP.NET Identity (JWT or Cookie Auth) |
-| Architecture | Multi-Project Clean Architecture (Domain, Infrastructure, WebApi) |
-| Version Control | Git + GitHub |
+| Layer           | Technology                                                          |
+|-----------------|---------------------------------------------------------------------|
+| Frontend        | HTML5, CSS3, JavaScript (ES6 Modules)                               |
+| Backend         | ASP.NET Core 8 Web API                                              |
+| Database        | Entity Framework Core + SQLite                                      |        
+| Authentication  | ASP.NET Identity (JWT or Cookie Auth)                               |
+| Architecture    | Multi-Project Clean Architecture (Domain, Infrastructure, WebApi)   |
+| Version Control | Git + GitHub                                                        |
 
 ---
 
