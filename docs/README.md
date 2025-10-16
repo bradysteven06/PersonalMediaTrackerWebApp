@@ -138,11 +138,10 @@ Open `frontend/index.html` in your browser.
 
 ## Screenshots (Placeholders)
 
-| Login Page | Media List | Add/Edit Entry |
-|-------------|-------------|----------------|
+| Login Page                                      | Media List                                    | Add/Edit Entry                                |
+|-------------------------------------------------|-----------------------------------------------|-----------------------------------------------|
 | ![Login Screenshot](docs/screenshots/login.png) | ![List Screenshot](docs/screenshots/list.png) | ![Form Screenshot](docs/screenshots/form.png) |
 
-*(Place screenshots in `/docs/screenshots/`.)*
 
 ---
 
@@ -163,6 +162,6 @@ This project is released under the [MIT License](LICENSE).
 
 ## Author
 **Steven Brady**  
-[GitHub: @StevenBradyWebDev](https://github.com/StevenBradyWebDev)
+[GitHub: @bradysteven06](https://github.com/bradysteven06)
 
 If you found this project useful, consider giving it a star on GitHub.
