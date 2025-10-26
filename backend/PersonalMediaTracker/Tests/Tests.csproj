@@ -38,15 +38,4 @@
     <Using Include="Xunit" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Domain\Entities\" />
-    <Folder Include="Domain\Enums\" />
-    <Folder Include="Domain\Mappings\" />
-    <Folder Include="Infrastructure\Database\" />
-    <Folder Include="Infrastructure\TagSync\" />
-    <Folder Include="WebApi\Controllers\" />
-    <Folder Include="WebApi\Integration\" />
-    <Folder Include="WebApi\Services\" />
-  </ItemGroup>
-
 </Project>
