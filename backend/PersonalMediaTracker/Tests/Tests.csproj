@@ -28,6 +28,20 @@
   </ItemGroup>
 
   <ItemGroup>
+	<!-- Copy the WebApi deps.json and present it as testhost.deps.json -->
+	<ContentWithTargetPath Include="..\WebApi\bin\$(Configuration)\net8.0\WebApi.deps.json">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  <TargetPath>testhost.deps.json</TargetPath>
+	</ContentWithTargetPath>
+
+	<!-- (Optional, but recommended) also copy the runtimeconfig for completeness -->
+	<ContentWithTargetPath Include="..\WebApi\bin\$(Configuration)\net8.0\WebApi.runtimeconfig.json">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  <TargetPath>testhost.runtimeconfig.json</TargetPath>
+	</ContentWithTargetPath>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Application\Application.csproj" />
     <ProjectReference Include="..\Domain\Domain.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />

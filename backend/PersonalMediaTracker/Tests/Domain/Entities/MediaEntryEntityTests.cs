@@ -31,13 +31,13 @@ namespace Tests.Domain.Entities
             var userId = Guid.NewGuid();
             var dto = new CreateMediaEntryDto
             {
-                Title = " My Movie ",   // surrounding spaces should be trimmed
-                Type = EntryType.Movie,
+                Title   = " My Movie ",   // surrounding spaces should be trimmed
+                Type    = EntryType.Movie,
                 SubType = EntrySubType.LiveAction,
-                Status = EntryStatus.Planning,
-                Rating = 7.5m,
-                Notes = " watch later ",
-                Tags = new[] { "Action", "Drama" } // tags handled by TagSyncService. not mapped here
+                Status  = EntryStatus.Planning,
+                Rating  = 7.5m,
+                Notes   = " watch later ",
+                Tags    = new[] { "Action", "Drama" } // tags handled by TagSyncService. not mapped here
             };
 
             // Act: map to entity

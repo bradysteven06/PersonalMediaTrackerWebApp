@@ -138,3 +138,11 @@ app.MapGet("/health", () => Results.Ok(new { status = "ok", timeUtc = DateTime.U
 app.MapControllers();
 
 app.Run();
+
+
+
+// Ensure the test project can reference the entry point type
+namespace WebApi
+{
+    public partial class Program { }
+}

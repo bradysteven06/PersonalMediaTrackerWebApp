@@ -1,14 +1,16 @@
 ﻿// Purpose:
-// - Hosts the real WebApi pipline in memory using WebApplicationFactory<T>.
+// - Hosts the real WebApi pipeline in memory using WebApplicationFactory<T>.
 // - Replaces the production DbContext registration with the in-memory SQLite
 //   connection so API integration tests hit a realistic relational database.
 // - Provides helper methods to create HttpClient instances (optionally with JWT).
 
 using System;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
@@ -17,14 +19,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using WebApi;
 using Infrastructure.Persistence;
-using Microsoft.VisualStudio.TestPlatform.TestHost;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using System.Net.Http.Json;
 
 namespace Tests.Shared.Fixtures
 {
-    public sealed class WebAppFactoryFixture : WebApplicationFactory<Program>, IDisposable
+    public sealed class WebAppFactoryFixture : WebApplicationFactory<Program>
     {
         private readonly SqliteConnection _connection;
 
@@ -44,6 +45,10 @@ namespace Tests.Shared.Fixtures
                 // Remove existing DbContextOptions registration (e.g., SQL Server).
                 var descriptor = services.SingleOrDefault(
                     d => d.ServiceType == typeof(DbContextOptions<AppDbContext>));
+                if (descriptor is not null)
+                {
+                    services.Remove(descriptor);
+                }
 
                 // Register AppDbContext with the shared in-memory SQLite connection.
                 services.AddDbContext<AppDbContext>(opts =>
@@ -69,7 +74,7 @@ namespace Tests.Shared.Fixtures
         });
 
         // Register + login a throwaway test user and return an HttpClient
-        // with the Authoriztion header already set.
+        // with the Authorization header already set.
         public async Task<HttpClient> CreateAuthenticatedClientAsync(string email = "tester@mailtest.com", string password = "Passw0rd!")
         {
             var client = CreateClientPlain();
@@ -83,17 +88,20 @@ namespace Tests.Shared.Fixtures
 
             var json = await loginResp.Content.ReadAsStringAsync();
             using var doc = JsonDocument.Parse(json);
-            var token = doc.RootElement.GetProperty("token").GetString();
+            var token = doc.RootElement.GetProperty("accessToken").GetString();
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             return client;
         }
 
-        public new void Dispose()
+        protected override void Dispose(bool disposing)
         {
-            base.Dispose();
-            _connection.Dispose();
+            base.Dispose(disposing);
+            if (disposing)
+            {
+                _connection.Dispose();
+            }
         }
     }
 
