@@ -22,9 +22,9 @@ namespace WebApi.Controllers
     public sealed class MediaEntriesController : ControllerBase
     {
         private readonly AppDbContext _db;
-        private readonly TagSyncService _tagSync;
+        private readonly ITagSyncService _tagSync;
 
-        public MediaEntriesController(AppDbContext db, TagSyncService tagSync)
+        public MediaEntriesController(AppDbContext db, ITagSyncService tagSync)
         {
             _db = db;
             _tagSync = tagSync;

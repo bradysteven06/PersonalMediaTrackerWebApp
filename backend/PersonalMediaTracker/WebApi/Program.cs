@@ -70,6 +70,8 @@ builder.Services.AddIdentityCore<ApplicationUser>(opt =>
     .AddEntityFrameworkStores<AppDbContext>()
     .AddSignInManager();
 
+builder.Services.AddScoped<ITagSyncService, TagSyncService>();
+
 // JWT Bearer Authentication
 var jwt = builder.Configuration.GetSection("Jwt");
 var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt["Key"]!));

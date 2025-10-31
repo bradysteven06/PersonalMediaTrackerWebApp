@@ -7,7 +7,7 @@ namespace WebApi.Services
 {
     // Syncs string tag names to EntryTags many-to-many rows.
     // Assumes entities: Tag {Id, Name }, EntryTag { EntryId, TagId, Tag, Entry }.
-    public sealed class TagSyncService
+    public sealed class TagSyncService : ITagSyncService
     {
         private readonly AppDbContext _db;
         public TagSyncService(AppDbContext db) => _db = db;
