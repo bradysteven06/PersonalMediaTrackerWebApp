@@ -2,6 +2,7 @@
 using System.Linq;
 using Domain.Entities;
 using WebApi.Contracts;
+using WebApi.Validation;
 
 namespace WebApi.Mapping
 {
@@ -18,6 +19,11 @@ namespace WebApi.Mapping
             if (string.IsNullOrWhiteSpace(dto.Title))
             {
                 return (null!, "Title is required.");
+            }
+
+            if (!RatingValidator.IsValid(dto.Rating, out var ratingErr))
+            {
+                return (null!, ratingErr);
             }
 
             var entity = new MediaEntry
@@ -46,6 +52,15 @@ namespace WebApi.Mapping
                     return "Title is required.";
                 }
                 entity.Title = dto.Title.Trim();
+            }
+
+            if (dto.Rating.HasValue)
+            {
+                if (!WebApi.Validation.RatingValidator.IsValid(dto.Rating, out var ratingErr))
+                {
+                    return ratingErr;
+                }
+                entity.Rating = dto.Rating.Value;
             }
 
             if (dto.Type.HasValue)      entity.Type = dto.Type.Value;
