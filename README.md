@@ -1,4 +1,4 @@
-![.NET Build & Test](https://github.com/bradysteven06/PersonalMediaTrackerWebApp/actions/workflows/dotnet.yml/badge.svg)
+[![.NET Build & Test](https://github.com/bradysteven06/PersonalMediaTrackerWebApp/actions/workflows/dotnet.yml/badge.svg)](https://github.com/bradysteven06/PersonalMediaTrackerWebApp/actions/workflows/dotnet.yml)
 
 # Personal Media Tracker Web App
 
