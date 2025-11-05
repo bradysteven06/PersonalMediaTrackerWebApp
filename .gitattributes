@@ -1,0 +1,10 @@
+# Auto-detect text files and normalize line endings
+* text=auto
+
+# Set default behavior for C#
+*.cs diff=csharp
+
+# Ensure consistency for frontend files
+*.js text
+*.css text
+*.html text
