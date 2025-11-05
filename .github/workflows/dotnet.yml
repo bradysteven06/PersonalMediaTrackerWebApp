@@ -29,14 +29,15 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-nuget-
 
-    # Restore everything under /backend (does not require a .sln path)
+    # Change working dir to where the .sln actually exists
     - name: Restore dependencies
-      run: dotnet restore backend
+      working-directory: backend
+      run: dotnet restore
 
-    # Build all projects under /backend in Release
     - name: Build (Release)
-      run: dotnet build backend --no-restore --configuration Release
+      working-directory: backend
+      run: dotnet build --no-restore --configuration Release
 
-    # Run all test projects under /backend/Tests
     - name: Run tests
-      run: dotnet test backend/Tests --no-build --configuration Release --verbosity normal
+      working-directory: backend
+      run: dotnet test --no-build --configuration Release --verbosity normal
