@@ -31,13 +31,13 @@ jobs:
 
     # Change working dir to where the .sln actually exists
     - name: Restore dependencies
-      working-directory: backend
+      working-directory: backend/PersonalMediaTracker
       run: dotnet restore
 
     - name: Build (Release)
-      working-directory: backend
+      working-directory: backend/PersonalMediaTracker
       run: dotnet build --no-restore --configuration Release
 
     - name: Run tests
-      working-directory: backend
+      working-directory: backend/PersonalMediaTracker
       run: dotnet test --no-build --configuration Release --verbosity normal
