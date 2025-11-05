@@ -45,7 +45,7 @@ Built with **ASP.NET Core 8**, **Entity Framework Core**, and **JavaScript (ES6 
 |-------------------|-------------------------------------------------------------------|
 | Frontend          | HTML5, CSS3, JavaScript (ES6 Modules)                             |
 | Backend           | ASP.NET Core 8 Web API                                            |
-| Database          | Entity Framework Core + SQLite/SQL Server                         |
+| Database          | Entity Framework Core + SQL Server                                |
 | Authentication    | ASP.NET Identity + JWT                                            |
 | Testing           | xUnit, FluentAssertions, Moq, EF Core InMemory, SQLite In-Memory  |
 | Version Control   | Git + GitHub                                                      |
