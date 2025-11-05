@@ -192,6 +192,7 @@ dotnet test
 | Login                                 | List                                  | Add/Edit                           |
 |---------------------------------------|---------------------------------------|------------------------------------|
 | ![Login](docs/images/login.png)       | ![List](docs/images/list.png)         | ![Form](docs/images/form.png)      |
+|                                       | ![List](docs/images/listDark.png)     | ![Form](docs/images/formDark.png)  |
 
 ---
 
