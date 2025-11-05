@@ -7,13 +7,10 @@ on:
   pull_request:
     branches: [ main ]
 
-env:
-  SOLUTION_PATH: backend/PersonalMediaTracker.sln
-
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
 
     steps:
     - name: Checkout repository
@@ -32,11 +29,15 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-nuget-
 
+    # Run all commands from the backend folder where the .sln actually lives
     - name: Restore dependencies
-      run: dotnet restore "$SOLUTION_PATH"
+      working-directory: backend
+      run: dotnet restore PersonalMediaTracker.sln
 
     - name: Build (Release)
-      run: dotnet build "$SOLUTION_PATH" --no-restore --configuration Release
+      working-directory: backend
+      run: dotnet build PersonalMediaTracker.sln --no-restore --configuration Release
 
     - name: Run tests
-      run: dotnet test "$SOLUTION_PATH" --no-build --configuration Release --verbosity normal
+      working-directory: backend
+      run: dotnet test PersonalMediaTracker.sln --no-build --configuration Release --verbosity normal
