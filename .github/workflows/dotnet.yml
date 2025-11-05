@@ -1,4 +1,12 @@
 # File: .github/workflows/dotnet.yml
+# Purpose: Continuous Integration for the Personal Media Tracker Web App
+# - Restores NuGet packages
+# - Builds the solution in Release
+# - Runs the test suite
+# Notes:
+#   • Solution lives under backend/PersonalMediaTracker
+#   • Keep comments to help future contributors
+
 name: .NET Build & Test
 
 on:
@@ -9,35 +17,51 @@ on:
 
 jobs:
   build:
+    name: Build & Test (.NET 8)
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      # 1) Checkout the repository at the current commit SHA
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Setup .NET 8
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
+      # 2) Install the .NET 8 SDK on the runner
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
 
-    - name: Cache NuGet packages
-      uses: actions/cache@v4
-      with:
-        path: ~/.nuget/packages
-        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
-        restore-keys: |
-          ${{ runner.os }}-nuget-
+      # 3) Cache the global NuGet package folder to speed up subsequent runs
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
 
-    # Change working dir to where the .sln actually exists
-    - name: Restore dependencies
-      working-directory: backend/PersonalMediaTracker
-      run: dotnet restore
+      # 4) Restore project dependencies
+      #    We run from the folder that contains the .sln to avoid MSB10003/MSB1009 path errors
+      - name: Restore dependencies
+        working-directory: backend/PersonalMediaTracker
+        run: dotnet restore
 
-    - name: Build (Release)
-      working-directory: backend/PersonalMediaTracker
-      run: dotnet build --no-restore --configuration Release
+      # 5) Build solution in Release mode
+      - name: Build (Release)
+        working-directory: backend/PersonalMediaTracker
+        run: dotnet build --no-restore --configuration Release
 
-    - name: Run tests
-      working-directory: backend/PersonalMediaTracker
-      run: dotnet test --no-build --configuration Release --verbosity normal
+      # 6) Run the test suite
+      - name: Run tests
+        working-directory: backend/PersonalMediaTracker
+        run: dotnet test --no-build --configuration Release --verbosity normal
+
+      # --- Optional quality gates (uncomment to enable) ---
+      # - name: Enforce formatting (.editorconfig)
+      #   working-directory: backend/PersonalMediaTracker
+      #   run: dotnet tool update -g dotnet-format && dotnet format --verify-no-changes
+      #
+      # - name: Collect code coverage (requires Coverlet in test project)
+      #   working-directory: backend/PersonalMediaTracker
+      #   run: dotnet test --no-build --configuration Release --collect:"XPlat Code Coverage"
