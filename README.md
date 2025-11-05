@@ -1,3 +1,5 @@
+![.NET Build & Test](https://github.com/bradysteven06/PersonalMediaTrackerWebApp/actions/workflows/dotnet.yml/badge.svg)
+
 # Personal Media Tracker Web App
 
 A full-stack web application that lets users track and organize anime, manga, movies, and TV shows.  
