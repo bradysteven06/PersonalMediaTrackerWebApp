@@ -29,15 +29,14 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-nuget-
 
-    # Run all commands from the backend folder where the .sln actually lives
+    # Restore everything under /backend (does not require a .sln path)
     - name: Restore dependencies
-      working-directory: backend
-      run: dotnet restore PersonalMediaTracker.sln
+      run: dotnet restore backend
 
+    # Build all projects under /backend in Release
     - name: Build (Release)
-      working-directory: backend
-      run: dotnet build PersonalMediaTracker.sln --no-restore --configuration Release
+      run: dotnet build backend --no-restore --configuration Release
 
+    # Run all test projects under /backend/Tests
     - name: Run tests
-      working-directory: backend
-      run: dotnet test PersonalMediaTracker.sln --no-build --configuration Release --verbosity normal
+      run: dotnet test backend/Tests --no-build --configuration Release --verbosity normal
