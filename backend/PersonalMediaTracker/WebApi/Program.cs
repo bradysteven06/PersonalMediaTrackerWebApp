@@ -52,10 +52,17 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// DbContext via DI using the connection string from apsettings.json
-var connStr = builder.Configuration.GetConnectionString("DefaultConnection")
-    ?? throw new InvalidOperationException("Missing 'DefaultConnection'.");
-builder.Services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(connStr));
+// DbContext via DI using the Postgres connection string.
+// In production (Render) we'll override this via environment variables:
+// ConnectionStrings__PostgresConnection
+var connStr = builder.Configuration.GetConnectionString("PostgresConnection")
+    ?? builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new InvalidOperationException("Missing PostgresConnection/DefaultConnection.");
+
+builder.Services.AddDbContext<AppDbContext>(opt =>
+{
+    opt.UseNpgsql(connStr);
+});
 
 // Identity Core
 builder.Services.AddIdentityCore<ApplicationUser>(opt =>
@@ -100,11 +107,13 @@ builder.Services.AddAuthorization();
 builder.Services.AddScoped<TagSyncService>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>(); // token generator for AuthController
 
-// CORS: allow your local front-end dev servers
+// CORS: allow your local front-end dev servers + optional deployed frontend origin
+var frontendOrigin = builder.Configuration["FrontendOrigin"];
 builder.Services.AddCors(opts =>
 {
-    opts.AddPolicy("Frontend", p => p
-        .WithOrigins(
+    opts.AddPolicy("Frontend", p =>
+    {
+        p.WithOrigins(
             "http://localhost:5500",    // VS Code Live Server
             "http://127.0.0.1:5500",
             "http://localhost:5173",    // Vite/React
@@ -112,17 +121,40 @@ builder.Services.AddCors(opts =>
             "http://localhost:3000",
             "https://localhost:3000")
         .AllowAnyHeader()
-        .AllowAnyMethod());
+        .AllowAnyMethod();
+
+        if (!string.IsNullOrWhiteSpace(frontendOrigin))
+        {
+            p.WithOrigins(
+                "http://localhost:5500",    // VS Code Live Server
+                "http://127.0.0.1:5500",
+                "http://localhost:5173",    // Vite/React
+                "https://localhost:5173",
+                "http://localhost:3000",
+                "https://localhost:3000",
+                frontendOrigin)
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+        }
+    });
 });
 
 var app = builder.Build();
 
+// ---------- Apply EF Core migrations on startup ----------
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.Migrate();
+}
+// ---------------------------------------------------------
+
 // Dev tools
 if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
 
 app.UseHttpsRedirection();
 
